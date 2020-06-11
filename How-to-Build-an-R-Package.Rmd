@@ -27,6 +27,7 @@ R studio isn't exactly a requirement
 For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.
 
 After R is installed, there are a few R packages that are needed before we can build our package.
+Try the following code to check if you have the `devtools`, `roxygen2`, `testthat`, and `knitr` packages installed and if not install them.
 
 ```{r}
 #install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
