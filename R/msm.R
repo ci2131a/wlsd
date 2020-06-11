@@ -9,7 +9,7 @@
 # does not really specify baseline variable statuses?
 # something to be looked into
 
-surv2msm <- function(data, id, time1, time2, event, cvars = NULL, tvars = NULL){
+surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
 # i guess I am just carrying over all other variables???
 
   # input checks
@@ -20,26 +20,43 @@ surv2msm <- function(data, id, time1, time2, event, cvars = NULL, tvars = NULL){
   if(missing(event)) stop("Argument to event not supplied")
 
 
+  if(!is.numeric(data[[time1]])) stop("time inputs must be numeric")
+  if(!is.numeric(data[[time2]])) stop("time inputs must be numeric")
+  if(!is.numeric(data[[event]])) stop("event variable must be numeric")
+
+# extract id and event columns
   cid <- data[id]
   ce <- data[event]
 
+# subset first observation of each person
   first <- data[!duplicated(cid),!(names(data) %in% c(time2))]
+# rename time variable
   names(first)[names(first)==time1] <- "time"
+# ensure the starting status is the same as the first event
   first[,event] <- min(ce)
-
+# drop start variable
   drop <- data[,!(names(data) %in% c(time1))]
   names(drop)[names(drop)==time2] <- "time"
+# combine the stop times with the first start time
   newdata <- rbind(first,drop)
-
+# sort the data by id and time
   sorted <- newdata[order(newdata[id], newdata["time"]),]
 
-  print(first)
-  print(drop)
-  print(newdata)
-  print(sorted)
+  if(msmevent){
+    if(min(ce) == 0){
+      sorted[event] <- sorted[event]+1
+    }else{
+      warning("Event values not changed")
+    }
+  }
+# returns
+
+  print(head(sorted))
+  print("Baseline values assumed to be the same as first stop time")
+
 }
 
-surv2msm(data = mydata, id = "sid", time1 = "start", time2 = "stop", event = "status")
+#surv2msm(data = mydata, id = "sid", time1 = "start", time2 = "stop", event = "status")
 
 
 
@@ -69,13 +86,14 @@ s2m <- function(data, id, time1, time2, event, cvars = NULL, tvars = NULL){
 }
 
 
-if(class(event) == "numeric"){
-  if(min(event)==0){
-    event = 1 + event
-  }
-  if(min(event)<0){
-    warning("Event indexes should start at 1")
-  }
+#if(class(event) == "numeric"){
+#  if(min(event)==0){
+#    event = 1 + event
+#  }
+#  if(min(event)<0){
+#    warning("Event indexes should start at 1")
+#  }
+#}
 
-}
+
 

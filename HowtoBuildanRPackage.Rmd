@@ -61,6 +61,9 @@ This will create a directory named after your package name and include it with m
 
 # R Code
 
+
+Organize the functions however you want. I think this is do to the lazy loading but effectively it does not check to see if all objects exist when it runs the files. So if you define a function that calls another function that you do not define until later on; that is okay and R will still process both functions.
+
 ## Best practices?
 
 Use `<-` for assignment rather than `=` in R.
