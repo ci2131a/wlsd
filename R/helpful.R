@@ -11,3 +11,5 @@ check_data <- function(data,id,time,status){
     try(time = as.Date(time))
   }
 }
+
+
