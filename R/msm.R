@@ -43,7 +43,7 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
   sorted <- newdata[order(newdata[id], newdata["time"]),]
 
   if(msmevent){
-    if(min(ce) == 0){
+    if(0 %in% min(ce)){
       sorted[event] <- sorted[event]+1
     }else{
       warning("Event values not changed")
