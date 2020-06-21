@@ -28,3 +28,8 @@ table2 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
                               status = c(0,0,1,0,0,1),
                               sex = c(0,0,0,1,1,0),
                               age = c(46,79,0,8766,8799,0))
+
+table3 <- mydata <- data.frame(sid = c(1,2,3),
+                              start = c(0,0,0),
+                              stop = c(126,33,28),
+                              status = c(1,0,1))
