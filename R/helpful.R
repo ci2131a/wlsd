@@ -65,11 +65,10 @@ for (element in v){
 }
 
 makeevent <- function(data, events){
-  newlist <- list(NULL)
-  i <- 1
-  for (element in events){
-    newlist[i] <- data[element]
-    i <- i+1
+  oldlist <- unlist(events)
+  newlist <- unlist(events)
+  for (element in 1:length(events)){
+    newlist[element] <- data[newlist[element]]
   }
   sapply(newlist, interaction())
 
@@ -82,3 +81,15 @@ makeevent <- function(data, event, ...){
 
 makeevent(eventdata,v)
 mapply(interaction, newlist)
+
+
+
+x <- c("a","b","c")
+y<-unlist(x)
+#[1] "a" "b" "c"
+unlist(x)[1]
+#[1] "a"
+unlist(x)[2]
+#[1] "b"
+length(x)
+#[1] 3

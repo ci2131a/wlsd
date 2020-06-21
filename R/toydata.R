@@ -25,8 +25,4 @@ lbp <- data.frame(sid = c(1,1,1,2,2,3),
 
 
 
-N   <- 5
-vec <- c(-1, 1)
-lst <- lapply(numeric(N), function(x) vec)
-expand.grid(lst)
-as.matrix(expand.grid(lst))
+
