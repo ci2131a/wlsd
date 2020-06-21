@@ -1,11 +1,11 @@
 ---
 title: "lsdwrangling"
 author: Charles Ingulli
-date: June 17, 2020
+date: June 21, 2020
 version: 0.1
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{lsdwrangling}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,19 +21,13 @@ knitr::opts_chunk$set(
 
 The `lsdwrangling` package seeks to provide methods for transforming data to a different format. For example, statistical packages such as the `survival` package or `msm` package require their input data to be configured in different ways. In order to use the same data set in both packages, it is necessary to reconfigure the same information in two forms. The `lsdwrangling` package offers several functions that offer a seemless transition between one or more data formats. 
 
-## Theory?
+## Data Formats
 
-
-
-The survival package implements many of the topics covered in survival analysis. See the book. 
-
-
+The relevant data formats that are used in this package are described below.
 
 ### Counting Process Data
 
-One common setup for the survival package data is the counting process format. This data is set up with two time variables and an event indicator. 
-
-
+One common data setup for survival analysis is the counting process format. This data is set up with two time variables and an event indicator. 
 
 
 Let us consider a survival study of 3 individuals. Individuals are followed from the time of enrollment in the study until the event of interest occurs with monthly follow up visits. The initial visit will be referred to as the baseline where all individuals are assumed to be event free. At the monthly follow ups, individuals are tested to assess whether or not they have received the event. Time is then represented by intervals between visits with an associated event indicator variable. A visual depiction of the data is shown below in Table 1 where time is measured in days. 
@@ -82,12 +76,12 @@ The constant variables have an easier interpretation since at every time point t
 
 Since the time intervals are considered open on the left and closed on the right, the value of the variable is observed at the right endpoint and stays constant ???
 
-### Right Censored
+### Right Censored Data
 
 <!-- Since this study was solely concerned with survival time, the rows of follow up visits does not offer any additional insight to survival. -->
 A simplified form of the data is then shown below.
 
-```{r}
+```{r, echo=FALSE}
 data3 <- mydata <- data.frame(sid = c(1,2,3),
                      start = c(0,0,0),
                      stop = c(126,33,28),
@@ -95,8 +89,16 @@ data3 <- mydata <- data.frame(sid = c(1,2,3),
 print(data3)
 ```
 
-This form conveys the similar information as the previous. Within the time interval $0, 126]$, individual 1 experiences the event. The data set shown in Table 2 is considered right censored data. The topic of censoring is outside the scope of this vignette but see (some sources) for more information. Additional simplifications are also possible. Since each individual starts at the same time point, in this example it is time of enrollment, the start variable can be ommitted. When each row corresponds to only one individual, some data sets may ommit the identification variable. 
+This form conveys the similar information as the previous. Within the time interval $(0, 126]$, individual 1 experiences the event. The data set shown in Table 2 is considered right censored data. The topic of censoring is outside the scope of this vignette but see (some sources) for more information. Additional simplifications are also possible. Since each individual starts at the same time point, in this example it is time of enrollment, the start variable can be ommitted. When each row corresponds to only one individual, some data sets may ommit the identification variable. 
 
+### Longitudinal Data
+
+The longitudinal data format is format used in repeated observation studies. It is also known as panel data and similarly panel studies. The respective terminologies are equivalent and refer to the same topics. 
+
+
+## Application
+
+The data formats described thus far are used for different statistical models. The counting process format is widely used in the `survival` package for implementing different proportional hazards models such as the Cox-proportional hazards model. The `flexsurv` package also uses this format and extends the `survival` package to add more flexible parametric proportional hazards models. The `msm` package uses the logitudinal data format to fit multi-state models. 
 
 # Implementation
 
