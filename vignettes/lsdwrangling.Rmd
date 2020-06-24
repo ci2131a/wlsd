@@ -3,11 +3,13 @@ title: "lsdwrangling"
 author: Charles Ingulli
 date: June 21, 2020
 version: 0.1
-output: rmarkdown::html_vignette
+output: 
+  pdf_document: default
+  rmarkdown::html_vignette: default
 vignette: >
   %\VignetteIndexEntry{lsdwrangling}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r, include = FALSE}
@@ -23,7 +25,7 @@ The `lsdwrangling` package seeks to provide methods for transforming data to a d
 
 ## Data Formats
 
-The relevant data formats that are used in this package are described below.
+The relevant data formats that are used in this package are described below. They include counting process data, right censored data, longitudinal data (panel data)
 
 ### Counting Process Data
 
@@ -32,12 +34,12 @@ One common data setup for survival analysis is the counting process format. This
 
 Let us consider a survival study of 3 individuals. Individuals are followed from the time of enrollment in the study until the event of interest occurs with monthly follow up visits. The initial visit will be referred to as the baseline where all individuals are assumed to be event free. At the monthly follow ups, individuals are tested to assess whether or not they have received the event. Time is then represented by intervals between visits with an associated event indicator variable. A visual depiction of the data is shown below in Table 1 where time is measured in days. 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, results = "asis"}
 data1 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
                      start = c(0,31,64,0,33,0),
                      stop = c(31,64,126,33,59,28),
                      status = c(0,0,1,0,0,1))
-print(data1)
+pander::pandoc.table(data1, caption = "Table 1: Counting Process Data")
 ```
 
 The variable representation of each column is :
@@ -74,7 +76,7 @@ The constant variables have an easier interpretation since at every time point t
 
 
 
-Since the time intervals are considered open on the left and closed on the right, the value of the variable is observed at the right endpoint and stays constant ???
+<!-- Since the time intervals are considered open on the left and closed on the right, the value of the variable is observed at the right endpoint and stays constant ??? -->
 
 ### Right Censored Data
 

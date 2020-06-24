@@ -56,7 +56,7 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
 
 }
 
-surv2msm(data = table2, id = "sid", time1 = "start", time2 = "stop", event = "status")
+#surv2msm(data = table2, id = "sid", time1 = "start", time2 = "stop", event = "status")
 
 
 
