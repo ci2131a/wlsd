@@ -52,6 +52,7 @@ basedate <- function(data,id,time,event,baseline.date){
   newdata <- rbind(first,data)
   # sort the data by id and time
   sorted <- newdata[order(newdata[id], newdata[time]),]
+  return(sorted)
 
 
 }
@@ -75,12 +76,15 @@ makeevent <- function(data, events){
 
 }
 
-makeevent <- function(data, event, ...){
-  interaction(data[[event]], data[[...]])
+makeevent <- function(data, events){
+  data$event <- interaction(data[events])
+  return(data)
 }
 
-makeevent(eventdata,v)
+newdata <- makeevent(eventdata,names)
 mapply(interaction, newlist)
+
+names <- c("event1", "event2", "event3")
 
 
 
