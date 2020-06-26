@@ -51,7 +51,7 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
   }
 # returns
   warning("Baseline values assumed to be the same as first stop time")
-  return(sorted)
+  sorted
 
 }
 
