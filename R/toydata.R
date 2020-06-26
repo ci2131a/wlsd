@@ -1,34 +1,20 @@
 # toy data sets
 # to use to test the functions
 
-mydata <- data.frame(sid = c(1,1,1,2,2,3),
-                     start = c(0,63,128,0,32,0),
-                     stop = c(63,128,156,32,59,28),
-                     status = c(0,0,1,0,0,1),
-                     var1 = c(10,10,10,6,6,3),
-                     var2 = c(1,2,3,1,2,1))
 
-
-
-eventdata <- data.frame(event1 = c(0,0,0,1,1),
-                        event2 = c(0,0,1,0,1),
-                        event3 = c(0,2,1,0,1))
-
-
-
-table1 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
+table1 <- data.frame(sid = c(1,1,1,2,2,3),
                               start = c(0,31,64,0,33,0),
                               stop = c(31,64,96,33,59,28),
                               status = c(0,0,1,0,0,1))
 
 
-table2 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
+table2 <- data.frame(sid = c(1,1,1,2,2,3),
                               start = c(0,31,64,0,33,0),
                               stop = c(31,64,96,33,59,28),
                               status = c(0,0,1,0,0,1),
                               age = c(46,46,46,39,39,57),
                               meds = c(0,1,2,0,1,2))
 
-table3 <- mydata <- data.frame(sid = c(1,2,3),
+table3 <- data.frame(sid = c(1,2,3),
                               time = c(96,33,28),
                               status = c(1,0,1))

@@ -55,34 +55,26 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
 
 }
 
-#surv2msm(data = table2, id = "sid", time1 = "start", time2 = "stop", event = "status")
 
 
 
-
-s2m <- function(data, id, time1, time2, event, cvars = NULL, tvars = NULL){
-  stop("This function is not done yet!")
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(id)) stop("Argument to id not supplied")
-  if(missing(time1)) stop("Argument to time1 not supplied")
-  if(missing(time2)) stop("Argument to time2 not supplied")
-  if(missing(event)) stop("Argument to event not supplied")
-
-  first <- dplyr::group_by(data,{{id}})
-  first <- dplyr::slice(first,1)
-  first <- dplyr::mutate(first,time1 = {{time}})
-  first <- dplyr::select(first, -time1,-time2)
-
-  subdata <- dplyr::mutate(data, time2 = time)
-  subdata <- dplyr::select(subdata, -time1, -time2)
-
-
-  mdata <- dplyr::bind_rows(first,subdata)
-  mdata <- dplyr::arrange(id,time)
-
-  return(mdata)
-
-}
+#s2m <- function(data, id, time1, time2, event, cvars = NULL, tvars = NULL){
+#  stop("This function is not done yet!")
+#  if(missing(data)) stop("Argument to data not supplied")
+#  if(missing(id)) stop("Argument to id not supplied")
+#  if(missing(time1)) stop("Argument to time1 not supplied")
+#  if(missing(time2)) stop("Argument to time2 not supplied")
+#  if(missing(event)) stop("Argument to event not supplied")
+#  first <- dplyr::group_by(data,{{id}})
+#  first <- dplyr::slice(first,1)
+#  first <- dplyr::mutate(first,time1 = {{time}})
+#  first <- dplyr::select(first, -time1,-time2)
+#  subdata <- dplyr::mutate(data, time2 = time)
+#  subdata <- dplyr::select(subdata, -time1, -time2)
+#  mdata <- dplyr::bind_rows(first,subdata)
+#  mdata <- dplyr::arrange(id,time)
+#  return(mdata)
+#}
 
 
 #if(class(event) == "numeric"){
