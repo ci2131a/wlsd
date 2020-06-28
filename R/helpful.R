@@ -1,33 +1,29 @@
+
+
+
+
 check_data <- function(data,id,time,event,baseline.date = NULL){
 
   if(missing(data)) stop("Missing argument to data")
   if(missing(id)) stop("Missing argument to id")
   if(missing(time)) stop("Missing argument to time")
   if(missing(event)) stop("Missing argument to status")
-  #n <- length(unique(data[id]))
-  newtime <- NULL
-  newbase <- NULL
 
-  #if(class(time) != "Date"){
-  #  newtime <- try(as.Date(time))
-  #}
+  newtime <- parse_date(data,time)
+  newevent <- makeevent(newtime,event)
+
   if(!is.null(baseline.date)){
-    basedate(data, id, time, event, baseline.date)
-
+    newbase <- basedate(newtime, id, time, event, baseline.date)
+    return(newbase)
+  }else{
+    return(newevent)
   }
-  print(sorted)
+
 }
 
 
-#if(class(baseline.date)!= "Date"){
-#  newbase <- try(as.Date(baseline.date))
-#}
-
-#check_data(data = lbp, id = "sid", baseline.date = "base", time = "follow", event = "status")
-
 
 parse_date <- function(data, time){
-  tv <- data[time]
   if(class(data[[time]])!="Date"){
     newtime <- NULL
     newtime <- try(as.Date(data[[time]]))
@@ -39,6 +35,8 @@ parse_date <- function(data, time){
   }
   data
 }
+
+
 
 basedate <- function(data,id,time,event,baseline.date){
   # extract id and event columns
@@ -64,6 +62,7 @@ makeevent <- function(data, events){
   data$event <- interaction(data[events])
   data
 }
+
 
 
 
