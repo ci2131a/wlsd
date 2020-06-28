@@ -22,18 +22,20 @@ check_data <- function(data,id,time,event,baseline.date = NULL){
 }
 
 
-
+# function to attempt to convert dates to numbers
+# trys for class character to date then numeric
+# or date to numeric
 parse_date <- function(data, time){
-  if(class(data[[time]])!="Date"){
-    newtime <- NULL
+  if(class(data[[time]])!="character"){
     newtime <- try(as.Date(data[[time]]))
-    if(!is.null(newtime)){
+    if(class(newtime)!="try-error"){
       data[time] <- newtime
     }else{
-      warning("Could not parse date")
+      stop("Could not parse date")
     }
   }
-  data
+  data$Ntime <- as.numeric(as.Date(data[time]))-as.numeric(min(as.Date(data[time])))
+  return(data)
 }
 
 
