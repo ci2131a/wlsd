@@ -28,13 +28,16 @@ check_data <- function(data,id,time,event,baseline.date = NULL){
 
 parse_date <- function(data, time){
   tv <- data[time]
-  if(class(tv)!="Date"){
+  if(class(data[[time]])!="Date"){
     newtime <- NULL
-    newtime <- try(as.Date(tv))
+    newtime <- try(as.Date(data[[time]]))
     if(!is.null(newtime)){
       data[time] <- newtime
+    }else{
+      warning("Could not parse date")
     }
   }
+  data
 }
 
 basedate <- function(data,id,time,event,baseline.date){
