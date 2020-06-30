@@ -3,8 +3,8 @@ title: "lsdwrangling"
 author: Charles Ingulli
 date: June 30, 2020
 output: 
-  html_document: default
   rmarkdown::html_vignette: default
+  html_document: default
 vignette: >
   %\VignetteIndexEntry{lsdwrangling}
   %\VignetteEncoding{UTF-8}
