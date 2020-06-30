@@ -1,0 +1,81 @@
+---
+title: "How to Build an R Package"
+author: "Charles Ingulli"
+date: "6/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = FALSE)
+```
+
+# Introduction
+
+This document contains some notes for creating an R package. All information is collected from the process of making my first R package.
+
+Notes collected during the process of making my own R package.
+
+Using Hadley's book as a guide
+
+# Setup
+
+## Installs
+
+R installation of version ?
+R studio isn't exactly a requirement 
+For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.
+
+After R is installed, there are a few R packages that are needed before we can build our package.
+Try the following code to check if you have the `devtools`, `roxygen2`, `testthat`, and `knitr` packages installed and if not install them.
+
+```{r}
+#install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
+for (package in c("devtools", "roxygen2", "testthat", "knitr")){
+  if(package %in% rownames(installed.packages()) == FALSE) {
+    install.packages(package)
+  } else {
+    #print(paste0(package," is installed"))
+    cat(package," is already installed\n")
+  }
+}
+
+```
+
+
+
+Additionally, to compile it? we need Rtools.
+
+
+## Create the package
+
+In RStudio, navigate to *File* > *New Project...* in order to create a new R project. We will use the R project to hold all the files, environments, and history relating to the package. When creating your package from scratch, select a new directory in which to place all files. 
+
+
+1. navigate to *File* > *New Project...*
+2. select new directory
+3. Choose R Package
+4. Name your package
+5. Select the desired directory
+
+This will create a directory named after your package name and include it with many of the necessary components to build a package. Such components include another directory called R to hold all .R files, a file called DESCRIPTION which will describe what your package does, a file called NAMESPACE to note any interactions with other packages, a .Rproj file which will maintain the project environment created by RStudio, and a .Rbuildignore file that will ignore any files contained within it if you decide to bundle your package. Aslo creates the man folder
+
+# R Code
+
+
+Organize the functions however you want. I think this is do to the lazy loading but effectively it does not check to see if all objects exist when it runs the files. So if you define a function that calls another function that you do not define until later on; that is okay and R will still process both functions.
+
+## Best practices?
+
+Use `<-` for assignment rather than `=` in R.
+
+Try to organize functions in appropriate R files. Avoid placing each function in its own file; it is okay for more complex functions. 
+
+Do not use source or library in your R files. The source is used to run all the code within a particular file but when you build your package R inherently does this so you should not use source as it will adversely affect the environment. Also, you should not use library because this function requires that a package already be installed. If someone using your package does not have the package you are trying to access with library then there will be issues. Instead, list these required functions in your namespace so they will be installed and loaded at the same time your package is installed and loaded. Additionally, there is a practice of using package::function within the R files to be even more clear about what functions belong to what packages. 
+
+Use appropriate spacing and indentation in your code so that is legible to outsiders. 
+
+
+
+
+
