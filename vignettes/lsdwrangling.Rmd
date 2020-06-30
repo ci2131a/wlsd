@@ -34,7 +34,7 @@ One common data setup for survival analysis is the counting process format. This
 Let us consider a survival study of 3 individuals. Individuals are followed from the time of enrollment in the study until the event of interest occurs with monthly follow up visits. The initial visit will be referred to as the baseline where all individuals are assumed to be event free. At the monthly follow ups, individuals are tested to assess whether or not they have received the event. Time is then represented by intervals between visits with an associated event indicator variable. A visual depiction of the data is shown below in Table 1 where time is measured in days. 
 
 ```{r, echo = FALSE, results = "asis"}
-data1 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
+data1 <- data.frame(sid = c(1,1,1,2,2,3),
                      start = c(0,31,64,0,33,0),
                      stop = c(31,64,96,33,59,28),
                      status = c(0,0,1,0,0,1))
@@ -63,7 +63,7 @@ In this example, age is a constant quantitative variable where as meds is a time
 Table 2 shows how these additional explanatory variables would be incorporated in counting process format.
 
 ```{r, echo = FALSE, results = "asis"}
-data2 <- mydata <- data.frame(sid = c(1,1,1,2,2,3),
+data2 <- data.frame(sid = c(1,1,1,2,2,3),
                      start = c(0,31,64,0,33,0),
                      stop = c(31,64,96,33,59,28),
                      status = c(0,0,1,0,0,1),
@@ -90,8 +90,9 @@ Time varying variables require a bit more interpretation. Even though the variab
 With the absence of time-dependent variables, the multiple rows of Table 1 do not provide additional information toward the time to event. A simplified form of the counting process data is often used instead. This form is called right censored data where each row corresponds to a single individual with their respective survival time. Censoring refers to an individual that does not experience the event during the period of study. In Table 1 and Table 2, individual 2 is considered censored, specifically right censored since they have not yet experienced the event by the end of their study time but will still experience the event after their observation times. The topic of censoring is outside the scope of this vignette but see (some sources) for more information. Table 3 shows an example of our survival study in right censored format. 
 
 ```{r, echo=FALSE, results = "asis"}
-data3 <- mydata <- data.frame(sid = c(1,2,3),
-                     time = c(96,33,28),
+data3 <- data.frame(sid = c(1,2,3),
+                     time1 = c(0,0,0),
+                     time2 = c(96,33,28),
                      status = c(1,0,1))
 pander::pandoc.table(data3, style = "rmarkdown", caption = "Table 3: Right Censored Data")
 ```
@@ -99,7 +100,13 @@ pander::pandoc.table(data3, style = "rmarkdown", caption = "Table 3: Right Censo
 This form conveys the similar information as the previous in regard to survival time. Within the time interval $(0, 96]$, individual 1 experiences the event. With the absence of time-dependent variables, we can consolidate all follow-up intervals into one larger interval to more consicesly convey the time to event.
 
 
-Additional simplifications are also possible. Since all individuals start at the same time pointthe start variable can be ommitted. That is, in this example, since each individual enrolls in the study at time 0, we do not need the start variable column. It can then be clearly stated all individuals start at time 0  and we need only include the possible event time. Additionally, when each row corresponds to only one individual, some data sets may ommit the identification variable. This way, it is further stated that each row corresponds to a unique individual.  
+Additional simplifications are also possible. Since all individuals start at the same time pointthe start variable can be ommitted. That is, in this example, since each individual enrolls in the study at time 0, we do not need the start variable column. It can then be clearly stated all individuals start at time 0  and we need only include the possible event time. Additionally, when each row corresponds to only one individual, some data sets may ommit the identification variable. This way, it is further stated that each row corresponds to a unique individual. Table 4 shows one of the simplest data formats that can be used in application with our example.
+
+```{r, echo = FALSE, results="asis"}
+table4 <- data.frame(time = c(96,33,28),
+                    status = c(1,0,1))
+```
+
 
 ### Longitudinal Data
 
