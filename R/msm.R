@@ -9,7 +9,7 @@
 # does not really specify baseline variable statuses?
 # something to be looked into
 
-surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
+surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE){
 # all other variables should get carried over
 
   # input checks
@@ -18,6 +18,7 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
   if(missing(time1)) stop("Argument to time1 not supplied")
   if(missing(time2)) stop("Argument to time2 not supplied")
   if(missing(event)) stop("Argument to event not supplied")
+
 
 
   #if(!is.numeric(data[[time1]])) stop("time inputs must be numeric")
@@ -50,7 +51,6 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
     }
   }
 # returns
-  warning("Baseline values assumed to be the same as first stop time")
   sorted
 
 }
@@ -131,6 +131,36 @@ surv2msm <- function(data, id, time1, time2, event, msmevent = TRUE){
 #    warning("Event indexes should start at 1")
 #  }
 #}
+
+first <- table2[!duplicated(table2["id"]),!(names(table2) %in% c("time2","meds"))]
+first["event"] <- min(first["event"])
+names(first)[names(first)=="time1"] <- "time"
+first
+table2
+
+transform(table2, meds = c(NA, meds[-nrow(table2)]))
+
+
+
+first <- table2[,!names(table2) %in% c("time2","event")]
+first
+names(first)[names(first) == "time1"] <- "time"
+last <- table2[,!names(table2) %in% c("time1","meds")]
+last
+names(last)[names(last) == "time2"] <- "time"
+newdata <- merge(first,last,all = TRUE)
+newdata[["event"]][is.na(newdata[["event"]])] <- min(table2[["event"]])
+newdata
+
+
+
+func <- function(a,b){
+  sum <- a + b
+  invisible(list(a = a, b = b, sum = sum))
+  sum
+}
+l <- func(2,4)
+func(2,4)
 
 
 
