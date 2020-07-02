@@ -5,11 +5,14 @@
 # (i.e. times are start, stop) into the longitudinal
 # format where time is one column
 
-# a final concern is that counting process notation
-# does not really specify baseline variable statuses?
-# something to be looked into
+# a new note:
+# the counting process format takes covariates
+# in intervals (t1,t2] for variables measured at time t1
+# survival studies individuals usually will transition
+# to a death state and will not be measured for
+# other variables at that time
 
-surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE){
+surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE, rcb2 = TRUE){
 # all other variables should get carried over
 
   # input checks
@@ -25,6 +28,7 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
   #if(!is.numeric(data[[time2]])) stop("time inputs must be numeric")
   if(!is.numeric(data[[event]])) stop("event variable must be numeric")
 
+  if(!rcb2){
 # extract id and event columns
   cid <- data[id]
   ce <- data[event]
@@ -47,11 +51,30 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
     if(0 %in% min(ce)){
       sorted[event] <- sorted[event]+1
     }else{
-      warning("Event values not changed")
+      warning("Event values not changed in msmevent")
     }
   }
 # returns
-  sorted
+  return(sorted)
+
+  }
+  else{
+    first <- data[,!names(data) %in% c(time2,event)]
+    names(first)[names(first) == time1] <- "time"
+    last <- data[,!names(data) %in% c(time1,tvars)]
+    names(last)[names(last) == time2] <- "time"
+    newdata <- merge(first,last,all = TRUE)
+    if(0 %in% min(data[[event]])){
+      newdata[[event]][is.na(newdata[[event]])] <- min(data[[event]])
+    }
+    if(0 %in% min(data[[event]]) & msmevent == TRUE){
+      newdata[[event]][is.na(newdata[[event]])] <- min(data[[event]])
+    }else{
+      warning("Event values not changed in msmevent")
+    }
+
+    return(newdata)
+  }
 
 }
 
@@ -132,35 +155,11 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
 #  }
 #}
 
-first <- table2[!duplicated(table2["id"]),!(names(table2) %in% c("time2","meds"))]
-first["event"] <- min(first["event"])
-names(first)[names(first)=="time1"] <- "time"
-first
-table2
-
-transform(table2, meds = c(NA, meds[-nrow(table2)]))
 
 
 
-first <- table2[,!names(table2) %in% c("time2","event")]
-first
-names(first)[names(first) == "time1"] <- "time"
-last <- table2[,!names(table2) %in% c("time1","meds")]
-last
-names(last)[names(last) == "time2"] <- "time"
-newdata <- merge(first,last,all = TRUE)
-newdata[["event"]][is.na(newdata[["event"]])] <- min(table2[["event"]])
-newdata
 
 
-
-func <- function(a,b){
-  sum <- a + b
-  invisible(list(a = a, b = b, sum = sum))
-  sum
-}
-l <- func(2,4)
-func(2,4)
 
 
 
