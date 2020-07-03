@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+
 # Introduction
 
 The `lsdwrangling` package seeks to provide methods for transforming data to a different format. For example, statistical packages such as the `survival` package or `msm` package require their input data to be configured in different ways. In order to use the same data set in both packages, it is necessary to reconfigure the same information in two forms. The `lsdwrangling` package offers several functions that offer a seemless transition between one or more data formats. 
