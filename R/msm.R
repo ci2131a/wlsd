@@ -29,16 +29,13 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
   if(!is.numeric(data[[event]])) stop("event variable must be numeric")
 
   if(!rcb2){
-# extract id and event columns
-  cid <- data[id]
-  ce <- data[event]
 
 # subset first observation of each person
-  first <- data[!duplicated(cid),!(names(data) %in% c(time2))]
+  first <- data[!duplicated(data[id]),!(names(data) %in% c(time2))]
 # rename time variable
   names(first)[names(first)==time1] <- "time"
 # ensure the starting status is the same as the first event
-  first[,event] <- min(ce)
+  first[,event] <- min(data[event])
 # drop start variable
   drop <- data[,!(names(data) %in% c(time1))]
   names(drop)[names(drop)==time2] <- "time"
