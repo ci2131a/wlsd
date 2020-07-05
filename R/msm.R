@@ -64,9 +64,10 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
     if(0 %in% min(data[[event]])){
       newdata[[event]][is.na(newdata[[event]])] <- min(data[[event]])
     }
-    if(0 %in% min(data[[event]]) & msmevent == TRUE){
-      newdata[[event]][is.na(newdata[[event]])] <- min(data[[event]])
-    }else{
+    if(0 %in% min(data[[event]]) & msmevent){
+      newdata[event] <- newdata[event] + 1
+    }
+    else{
       warning("Event values not changed in msmevent")
     }
 
