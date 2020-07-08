@@ -1,5 +1,6 @@
 Package: wlsd
 Type: Package
+Date: 2020
 Title: Wrangling Longitudinal Survival Data
 Version: 0.0.0.9000
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
