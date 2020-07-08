@@ -1,6 +1,6 @@
 # wlsd
 
-Survival analysis data may come in different usable forms. Transitioning between formats requires detailed knowledge of the model assumptions and how variables are treated. The `wlsd` package in R seeks to provide methods for transforming data between usable formats in an effort to ease this process. `wlsd` can transition between the counting process format and longitudinal or panel format. 
+Survival analysis data may come in different usable forms. Transitioning between formats requires detailed knowledge on how information is parsed and how variables are treated. The `wlsd` package in R seeks to provide methods for transforming data between usable formats in an effort to ease this process. `wlsd` can transition between the counting process format and longitudinal or panel format.
 
 ## Installation
 
