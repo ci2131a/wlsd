@@ -376,8 +376,10 @@ summary {
 <div id="setup" class="section level1">
 <h1>Setup</h1>
 <p>The first step to making an R package is setting up our working environment to add all the necessary components. We describe the setup here.</p>
-<div id="requirements-as-list" class="section level2">
-<h2>Requirements as List</h2>
+<div id="requirements" class="section level2">
+<h2>Requirements</h2>
+<div id="as-list" class="section level3">
+<h3>as List</h3>
 <ul>
 <li><em><em>Programs</em></em>
 <ul>
@@ -394,8 +396,8 @@ summary {
 </ul></li>
 </ul>
 </div>
-<div id="description-of-requirements" class="section level2">
-<h2>Description of Requirements</h2>
+<div id="as-description" class="section level3">
+<h3>as Description</h3>
 <p>An R installation is required. We are going to require RStudio for its usefullness. RStudio is a great IDE with many benefits for novices and experts. This is not a technical requirement and it possible to create an R package without RStudio, but it is not recommended.</p>
 <p>After R is installed, there are a few R packages that are needed before we can build our package. These include: <code>devtools</code>, <code>roxygen2</code>, <code>testthat</code>, and <code>knitr</code>. <code>devtools</code> provides a lot of R functions that will allow you to interact with packages. For example, you can install them, bundle them, add licenses, and more just with a few simple functions. <code>roxygen2</code> is used for something. I believe <code>testthat</code> is</p>
 <p>If you do not have these packages install them through the <code>install.packages()</code> function. If you are unsure whether or not you have these packages, (I was at first) try the following code to check if you have the packages installed and if not install them:</p>
@@ -410,28 +412,32 @@ for (package in c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quo
 }</code></pre>
 <p>If you are using RStudio, you can look at the list of packages under the tab <em>Packages</em>. Additionally, to compile packages from source, we need Rtools.</p>
 </div>
-<div id="create-the-package" class="section level2">
-<h2>Create the package</h2>
-<p>In RStudio, navigate to <em>File</em> &gt; <em>New Project…</em> in order to create a new R project. We will use the R project to hold all the files, environments, and history relating to the package. When creating your package from scratch, select a new directory in which to place all files.</p>
-<ol style="list-style-type: decimal">
-<li>navigate to <em>File</em> &gt; <em>New Project…</em></li>
-<li>select new directory</li>
-<li>Choose R Package</li>
-<li>Name your package</li>
-<li>Select the desired directory</li>
-</ol>
-<p>This will create a directory named after your package name and include it with many of the necessary components to build a package. Such components include another directory called R to hold all .R files, a file called DESCRIPTION which will describe what your package does, a file called NAMESPACE to note any interactions with other packages, a .Rproj file which will maintain the project environment created by RStudio, and a .Rbuildignore file that will ignore any files contained within it if you decide to bundle your package. Aslo creates the man folder</p>
+</div>
+<div id="create-necessary-files" class="section level2">
+<h2>Create Necessary Files</h2>
+<div id="r-project" class="section level3">
+<h3>R Project</h3>
+<p>RStudio provides a helpful tool to create all the necessary R package files in one directory called a Project. R’s Project is useful for switching between tasks and files within RStudio. It remembers the files that were open, can be used for version history, and can load the environment with previous <code>.RData</code> files. For more information, see RStudio Support’s article on <a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">Projects</a> and check out the related articles.</p>
+<p>We are interested in packages and there exists a specific subclass of Project specifically for this. It will at the very least create all the necessary files for an R package but at most has all the functionality described earlier. In RStudio, navigate to <em>File</em> &gt; <em>New Project…</em> in order to create a new R project. We will use the R project to hold all the files, environments, and history relating to the package. When creating your package from scratch, select a new directory in which to place all files.</p>
+<p>The workflow will follow by: 1. navigate to <em>File</em> &gt; <em>New Project…</em> 2. select new directory 3. Choose R Package 4. Name your package (this is the hardest part) 5. Select the desired directory</p>
+<p>This will create a new directory with the same name as your package include fill it with many of the necessary components to build a package. Such components include another directory called R to hold all .R files, a file called DESCRIPTION which will describe what your package does, a file called NAMESPACE to note any interactions with other packages, a .Rproj file which will maintain the project environment created by RStudio, and a .Rbuildignore file that will ignore any files contained within it if you decide to bundle your package. Aslo creates the man folder</p>
 </div>
 </div>
-<div id="write-some-r-code" class="section level1">
-<h1>Write some R code!</h1>
-<p>Organize the functions however you want. I think this is do to the lazy loading but effectively it does not check to see if all objects exist when it runs the files. So if you define a function that calls another function that you do not define until later on; that is okay and R will still process both functions.</p>
-<div id="best-practices" class="section level2">
-<h2>Best practices?</h2>
+<div id="some-r-code" class="section level2">
+<h2>Some R code!</h2>
+<p>The bulk of the package will consist of various <code>.R</code> files (scripts) that define functions to use. Organize the functions however you want. R does a lazy load of all files when you run a package. Effectively, it means that R does not check to see if all objects exist when it runs the files. So, if you define a function that calls another function thats defined somewhere else, R will process both functions and look to find it only when you execute the function.</p>
+<div id="some-best-practices" class="section level3">
+<h3>Some best practices</h3>
 <p>Use <code>&lt;-</code> for assignment rather than <code>=</code> in R.</p>
-<p>Try to organize functions in appropriate R files. Avoid placing each function in its own file; it is okay for more complex functions.</p>
+<p>Try to organize functions in appropriate R files. Avoid placing each function in its own file; it is okay for more complex functions. Use good judgement.</p>
 <p>Do not use source or library in your R files. The source is used to run all the code within a particular file but when you build your package R inherently does this so you should not use source as it will adversely affect the environment. Also, you should not use library because this function requires that a package already be installed. If someone using your package does not have the package you are trying to access with library then there will be issues. Instead, list these required functions in your namespace so they will be installed and loaded at the same time your package is installed and loaded. Additionally, there is a practice of using package::function within the R files to be even more clear about what functions belong to what packages.</p>
 <p>Use appropriate spacing and indentation in your code so that is legible to outsiders.</p>
+<p>Comment, comment, comment! This is very important not only so others can understand your code but you can quickly refresh your memory after large gaps of not working on something.</p>
+</div>
+</div>
+<div id="help-files" class="section level2">
+<h2>Help files</h2>
+<p>An important aspect of R and RStudio is the help files for all existing R functions. After creating a function for your package, it may be useful to immediately create the help file to keep track of what the function should do it and how it operates. The help files are stored in the <code>man/</code> directory and consist of text files with the <code>.Rd</code> extension. The</p>
 </div>
 </div>
 <div id="sources" class="section level1">
