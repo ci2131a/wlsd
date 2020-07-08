@@ -364,24 +364,42 @@ summary {
 
 <h1 class="title toc-ignore">How to Build an R Package</h1>
 <h4 class="author">Charles Ingulli</h4>
-<h4 class="date">6/1/2020</h4>
+<h4 class="date">7/7/2020</h4>
 
 </div>
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This document contains some notes for creating an R package. All information is collected from the process of making my first R package.</p>
-<p>Notes collected during the process of making my own R package.</p>
-<p>Using Hadley’s book as a guide</p>
+<p>This document contains some notes for creating an R package. All information has been collected through the process of making my first R package.</p>
 </div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
-<div id="installs" class="section level2">
-<h2>Installs</h2>
-<p>R installation of version ? R studio isn’t exactly a requirement For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.</p>
-<p>After R is installed, there are a few R packages that are needed before we can build our package. Try the following code to check if you have the <code>devtools</code>, <code>roxygen2</code>, <code>testthat</code>, and <code>knitr</code> packages installed and if not install them.</p>
-<pre class="r"><code>#install.packages(c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quot;, &quot;knitr&quot;))
+<p>The first step to making an R package is setting up our working environment to add all the necessary components. We describe the setup here.</p>
+<div id="requirements-as-list" class="section level2">
+<h2>Requirements as List</h2>
+<ul>
+<li><em><em>Programs</em></em>
+<ul>
+<li>R</li>
+<li>RStudio</li>
+<li>Rtools</li>
+</ul></li>
+<li><em><em>Packages</em></em>
+<ul>
+<li><code>devtools</code></li>
+<li><code>roxygen2</code></li>
+<li><code>testthat</code></li>
+<li><code>knitr</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="description-of-requirements" class="section level2">
+<h2>Description of Requirements</h2>
+<p>R installation of version ? RStudio isn’t exactly a requirement but it greatly enhances the experience. RStudio is a great IDE with so many benefits For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.</p>
+<p>After R is installed, there are a few R packages that are needed before we can build our package. These include: <code>devtools</code>, <code>roxygen2</code>, <code>testthat</code>, and <code>knitr</code>. <code>devtools</code> provides a lot of R functions that will allow you to interact with packages. For example, you can install them, bundle them, add licenses, and more just with a few simple functions. <code>roxygen2</code> is used for something. I believe <code>testthat</code> is</p>
+<p>If you do not have these packages install them through the <code>install.packages()</code> function. If you are unsure whether or not you have these packages, (I was at first) try the following code to check if you have the packages installed and if not install them:</p>
+<pre class="r"><code># check for installed package; if missing will install
 for (package in c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quot;, &quot;knitr&quot;)){
   if(package %in% rownames(installed.packages()) == FALSE) {
     install.packages(package)
@@ -390,7 +408,7 @@ for (package in c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quo
     cat(package,&quot; is already installed\n&quot;)
   }
 }</code></pre>
-<p>Additionally, to compile it? we need Rtools.</p>
+<p>If you are using RStudio, you can look at the list of packages under the tab <em>Packages</em>. Additionally, to compile packages from source, we need Rtools.</p>
 </div>
 <div id="create-the-package" class="section level2">
 <h2>Create the package</h2>
@@ -415,6 +433,9 @@ for (package in c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quo
 <p>Do not use source or library in your R files. The source is used to run all the code within a particular file but when you build your package R inherently does this so you should not use source as it will adversely affect the environment. Also, you should not use library because this function requires that a package already be installed. If someone using your package does not have the package you are trying to access with library then there will be issues. Instead, list these required functions in your namespace so they will be installed and loaded at the same time your package is installed and loaded. Additionally, there is a practice of using package::function within the R files to be even more clear about what functions belong to what packages.</p>
 <p>Use appropriate spacing and indentation in your code so that is legible to outsiders.</p>
 </div>
+</div>
+<div id="sources" class="section level1">
+<h1>Sources</h1>
 </div>
 
 

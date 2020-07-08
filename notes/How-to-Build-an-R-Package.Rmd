@@ -1,7 +1,7 @@
 ---
 title: "How to Build an R Package"
 author: "Charles Ingulli"
-date: "6/1/2020"
+date: "7/7/2020"
 output: html_document
 ---
 
@@ -12,25 +12,37 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Introduction
 
-This document contains some notes for creating an R package. All information is collected from the process of making my first R package.
+This document contains some notes for creating an R package. All information has been collected through the process of making my first R package.
 
-Notes collected during the process of making my own R package.
-
-Using Hadley's book as a guide
 
 # Setup
 
-## Installs
+The first step to making an R package is setting up our working environment to add all the necessary components. We describe the setup here.
 
-R installation of version ?
-R studio isn't exactly a requirement 
-For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.
+## Requirements as List
 
-After R is installed, there are a few R packages that are needed before we can build our package.
-Try the following code to check if you have the `devtools`, `roxygen2`, `testthat`, and `knitr` packages installed and if not install them.
+* *_Programs_*
+  - R
+  - RStudio
+  - Rtools
+* *_Packages_*
+  - `devtools`
+  - `roxygen2`
+  - `testthat`
+  - `knitr`
+
+## Description of Requirements
+
+An R installation is required. We are going to require RStudio for its usefullness. RStudio is a great IDE with many benefits for novices and experts. This is not a technical requirement and it possible to create an R package without RStudio, but it is not recommended. 
+
+
+After R is installed, there are a few R packages that are needed before we can build our package. These include: `devtools`, `roxygen2`, `testthat`, and `knitr`. `devtools` provides a lot of R functions that will allow you to interact with packages. For example, you can install them, bundle them, add licenses, and more just with a few simple functions. `roxygen2` is used for something. I believe `testthat` is 
+
+
+If you do not have these packages install them through the `install.packages()` function. If you are unsure whether or not you have these packages, (I was at first) try the following code to check if you have the packages installed and if not install them:
 
 ```{r}
-#install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
+# check for installed package; if missing will install
 for (package in c("devtools", "roxygen2", "testthat", "knitr")){
   if(package %in% rownames(installed.packages()) == FALSE) {
     install.packages(package)
@@ -43,8 +55,8 @@ for (package in c("devtools", "roxygen2", "testthat", "knitr")){
 ```
 
 
-
-Additionally, to compile it? we need Rtools.
+If you are using RStudio, you can look at the list of packages under the tab *Packages*.
+Additionally, to compile packages from source, we need Rtools.
 
 
 ## Create the package
@@ -77,5 +89,5 @@ Use appropriate spacing and indentation in your code so that is legible to outsi
 
 
 
-
+# Sources
 
