@@ -1,9 +1,10 @@
 ---
-title: "lsdwrangling"
+title: "wlsd: Wrangling Longitudinal Survival Data"
 author: Charles Ingulli
 date: June 30, 2020
 output: 
   rmarkdown::html_vignette: default
+  hmtl_document: default
   pdf_document: default
 vignette: >
   %\VignetteIndexEntry{lsdwrangling}
@@ -22,7 +23,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Different types of survival models require different formats for their data in order to be applied. Transitioning between formats requires in detailed knowledge of the model assumptions and how variables are treated. The `lsdwrangling` package in R seeks to provide methods for transforming data between usable formats in an effort to ease this process `lsdwrangling` can transition between the counting process format and longitudinal or panel format. 
+Different types of survival models require different formats for their data in order to be applied. Transitioning between formats requires in detailed knowledge of the model assumptions and how variables are treated. The `wlsd` package in R seeks to provide methods for transforming data between usable formats in an effort to ease this process `wlsd` can transition between the counting process format and longitudinal or panel format. 
 
 
 ## Data Formats

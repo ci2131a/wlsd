@@ -1,11 +1,10 @@
 Package: wlsd
 Type: Package
-Title: wlsd: Wrangling Longitudinal Survival Data
+Title: Wrangling Longitudinal Survival Data
 Version: 0.0.0.9000
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: This package provides functions to transform data sets into
-    forms for survival analysis. 
+Description: This package provides functions to transition between different data formats for survival analysis. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
