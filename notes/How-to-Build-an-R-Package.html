@@ -396,7 +396,7 @@ summary {
 </div>
 <div id="description-of-requirements" class="section level2">
 <h2>Description of Requirements</h2>
-<p>R installation of version ? RStudio isn’t exactly a requirement but it greatly enhances the experience. RStudio is a great IDE with so many benefits For veteran package makers, RStudio probably is not a requirement but provides a great many benefits for newcomers.</p>
+<p>An R installation is required. We are going to require RStudio for its usefullness. RStudio is a great IDE with many benefits for novices and experts. This is not a technical requirement and it possible to create an R package without RStudio, but it is not recommended.</p>
 <p>After R is installed, there are a few R packages that are needed before we can build our package. These include: <code>devtools</code>, <code>roxygen2</code>, <code>testthat</code>, and <code>knitr</code>. <code>devtools</code> provides a lot of R functions that will allow you to interact with packages. For example, you can install them, bundle them, add licenses, and more just with a few simple functions. <code>roxygen2</code> is used for something. I believe <code>testthat</code> is</p>
 <p>If you do not have these packages install them through the <code>install.packages()</code> function. If you are unsure whether or not you have these packages, (I was at first) try the following code to check if you have the packages installed and if not install them:</p>
 <pre class="r"><code># check for installed package; if missing will install
@@ -423,8 +423,8 @@ for (package in c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quo
 <p>This will create a directory named after your package name and include it with many of the necessary components to build a package. Such components include another directory called R to hold all .R files, a file called DESCRIPTION which will describe what your package does, a file called NAMESPACE to note any interactions with other packages, a .Rproj file which will maintain the project environment created by RStudio, and a .Rbuildignore file that will ignore any files contained within it if you decide to bundle your package. Aslo creates the man folder</p>
 </div>
 </div>
-<div id="r-code" class="section level1">
-<h1>R Code</h1>
+<div id="write-some-r-code" class="section level1">
+<h1>Write some R code!</h1>
 <p>Organize the functions however you want. I think this is do to the lazy loading but effectively it does not check to see if all objects exist when it runs the files. So if you define a function that calls another function that you do not define until later on; that is okay and R will still process both functions.</p>
 <div id="best-practices" class="section level2">
 <h2>Best practices?</h2>
