@@ -15,3 +15,4 @@ If you download the development version from this repository to your local machi
 ```{r}
 devtools::load_all()
 ```
+Be sure you have the `devtools` package installed. You can install this through the traditional: `install.packages("devtools")`
