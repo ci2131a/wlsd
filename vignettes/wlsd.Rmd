@@ -37,6 +37,14 @@ The relevant data formats that are used in this package are described below. The
 A longitudinal study is a repeated observation method by which to investigate a phenomenon. These studies are often carried out over large quantities of time with the phenomenon being measured at snapshots of the process. Subsequently, longitudinal data is the format adopted by these studies. An equivalent term is a panel study and similarly panel data. Both terminologies refer to the same respective topics. The semantic difference lies in what the repeated observation is. If we are repeatedly observing individuals, the term panel may be more appropriate. For a more general subject, the term longitudianl may be more appropriate (Cite). For our purposes, we use the terms interchangably as they are effectively the same. Longitudinal data refers to data in long form where each row corresponds to a specific time point. This is method is used  For an individual with 10 follow-up observations, data will consist of 10 rows with values at each time. 
 
 
+```{r, echo = FALSE, results = "asis"}
+data0 <- data.frame(sid = c(1,1,1,1,2,2,2,3,3),
+                     start = c(0,31,64,96,0,33,59,0,28),
+                     status = c(1,1,1,2,1,1,2,1,2))
+pander::pandoc.table(data0, style = "rmarkdown", caption = "Table 2: Panel Data")
+```
+
+
 ### Counting Process Format
 
 One common data setup for survival analysis is the counting process format. This data is set up with two time variables and an event indicator. The variables describe a time interval between the two time points where the event indicator describes 
