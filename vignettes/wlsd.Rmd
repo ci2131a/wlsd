@@ -38,10 +38,10 @@ A longitudinal study is a repeated observation method by which to investigate a 
 
 
 ```{r, echo = FALSE, results = "asis"}
-data0 <- data.frame(sid = c(1,1,1,1,2,2,2,3,3),
-                     start = c(0,31,64,96,0,33,59,0,28),
-                     status = c(1,1,1,2,1,1,2,1,2))
-pander::pandoc.table(data0, style = "rmarkdown", caption = "Table 2: Panel Data")
+table1 <- data.frame(id = c(1,1,1,1,2,2,2,3,3),
+                     time = c(0,31,64,96,0,33,59,0,28),
+                     event = c(0,0,0,1,0,0,1,0,1))
+pander::pandoc.table(table1, style = "rmarkdown", caption = "Table 1: Longitudinal Data")
 ```
 
 
@@ -53,19 +53,19 @@ One common data setup for survival analysis is the counting process format. This
 Let us consider a survival study of 3 individuals. Individuals are followed from the time of enrollment in the study until the event of interest occurs with monthly follow up visits. The initial visit will be referred to as the baseline where all individuals are assumed to be event free. At the monthly follow ups, individuals are tested to assess whether or not they have experienced the event. Time is represented by intervals between visits with an associated event indicator variable. A visual depiction of the data is shown below in Table 1 where time is measured in days. 
 
 ```{r, echo = FALSE, results = "asis"}
-data1 <- data.frame(sid = c(1,1,1,2,2,3),
-                     start = c(0,31,64,0,33,0),
-                     stop = c(31,64,96,33,59,28),
-                     status = c(0,0,1,0,0,1))
-pander::pandoc.table(data1, style = "rmarkdown", caption = "Table 1: Counting Process Data")
+table2 <- data.frame(id = c(1,1,1,2,2,3),
+                              time1 = c(0,31,64,0,33,0),
+                              time2 = c(31,64,96,33,59,28),
+                              event = c(0,0,1,0,0,1))
+pander::pandoc.table(table2, style = "rmarkdown", caption = "Table 2: Counting Process Data")
 ```
 
 The variable representation of each column is :
 
-* **sid** - the individual's identification number.
-* **start** - the left end point of the time interval.
-* **stop** - the right end point of the time interval.
-* **status** - the event indicator (0 denotes no event and 1 denotes having the event).
+* **id** - the individual's identification number.
+* **time1** - the left end point of the time interval.
+* **time2** - the right end point of the time interval.
+* **event** - the event indicator (0 denotes no event and 1 denotes having the event).
 
 Each row of the data corresponds to a particular time interval for each individual. We can see in the first row that individual 1 started the study at time 0 and had a follow up visit 31 days later. At day 31, individual 1 is tested for the event and is determined to have not experienced the event. Time intervals are considered open on the left and closed on the right. That is, for times $t_1$ and $t_2$ where $t_1 < t_2$, the time interval is $(t_1, t_2]$. Looking at the third row, individual 1 starts a new time interval at day 64 and is seen for another follow up at day 96. At time 96, individual 1 is tested and is marked as experiencing the event.
 
@@ -82,14 +82,14 @@ In this example, age is a constant quantitative variable where as meds is a time
 Table 2 shows how these additional explanatory variables would be incorporated in counting process format.
 
 ```{r, echo = FALSE, results = "asis"}
-data2 <- data.frame(sid = c(1,1,1,2,2,3),
-                     start = c(0,31,64,0,33,0),
-                     stop = c(31,64,96,33,59,28),
-                     status = c(0,0,1,0,0,1),
+table3 <- data.frame(id = c(1,1,1,2,2,3),
+                     time1 = c(0,31,64,0,33,0),
+                     time2 = c(31,64,96,33,59,28),
+                     event = c(0,0,1,0,0,1),
                      age = c(46,46,46,39,39,57),
                      meds = c(0,1,2,0,1,2)
                      )
-pander::pandoc.table(data2, style = "rmarkdown", caption = "Table 2: Counting Process Data with Explanatory Variables")
+pander::pandoc.table(table3, style = "rmarkdown", caption = "Table 3: Counting Process Data with Explanatory Variables")
 
 ```
 
@@ -109,11 +109,11 @@ Time varying variables require a bit more interpretation. Even though the variab
 With the absence of time-dependent variables, the multiple rows of Table 1 do not provide additional information toward the time to event. A simplified form of the counting process data is often used instead. This form is called right censored data where each row corresponds to a single individual with their respective survival time. Censoring refers to an individual that does not experience the event during the period of study. In Table 1 and Table 2, individual 2 is considered censored, specifically right censored since they have not yet experienced the event by the end of their study time but will still experience the event after their observation times. The topic of censoring is outside the scope of this vignette but see (Cite) for more information. Table 3 shows an example of our survival study in right censored format. 
 
 ```{r, echo=FALSE, results = "asis"}
-data3 <- data.frame(sid = c(1,2,3),
+table4 <- data.frame(sid = c(1,2,3),
                      time1 = c(0,0,0),
                      time2 = c(96,33,28),
                      status = c(1,0,1))
-pander::pandoc.table(data3, style = "rmarkdown", caption = "Table 3: Right Censored Data")
+pander::pandoc.table(data3, style = "rmarkdown", caption = "Table 4: Right Censored Data")
 ```
 
 This form conveys the similar information as the previous in regard to survival time. Within the time interval $(0, 96]$, individual 1 experiences the event. With the absence of time-dependent variables, we can consolidate all follow-up intervals into one larger interval to more consicesly convey the time to event.
@@ -130,14 +130,11 @@ The data formats described thus far are used for different statistical models. T
 
 
 
+The development version of the package currently resides on GitHub at the following link: <https://github.com/ci2131a/wlsd>. It can be installed by running the code below. This installation requires the `devtools` package. If you have not already installed `devtools`, it can be installed by the traditional means from the comprehensive R archive network (CRAN) using `install.packages("devtools")`. 
 
 
-
-The 
-
-
-```{r setup}
-#library(mypackage)
+```{r install}
+devtools::install_github("ci2131a/wlsd")
 ```
 
 
