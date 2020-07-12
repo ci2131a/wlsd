@@ -28,10 +28,12 @@ count_data <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
 
 
+newdata <- aggregate(table0[,names(table0) %in% "meds"],by=list(table0[,"id"]), "sum")
 
 
-tvarfun <- function(data,tvars,tfun){
-  aggregate(vframe[,names(vframe) %in% c("meds","state")],by=list(vframe[,"id"]), median)
+tvarfun <- function(data,id,tvars,tfun){
+  tdata <- data[,names(data) %in% c(id, tvars)]
+  newdata <- aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
 
 }
 # code for dplyr
