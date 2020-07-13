@@ -1,6 +1,6 @@
 # Functions to setup longitudinal data for count data regression
 
-count_data <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
+long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
   # input checks
   if(missing(data)) stop("Argument to data not supplied")
   if(missing(id)) stop("Argument to id not supplied")
