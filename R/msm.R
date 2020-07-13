@@ -12,7 +12,7 @@
 # to a death state and will not be measured for
 # other variables at that time
 
-surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE, rcb2 = TRUE){
+surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE){
 # all other variables should get carried over
 
   # input checks
@@ -36,9 +36,8 @@ surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRU
   newdata <- merge(first,last,all = TRUE)
   if(0 %in% min(data[[event]])){
     newdata[[event]][is.na(newdata[[event]])] <- min(data[[event]])
-  }
-  if(0 %in% min(data[[event]]) & msmevent){
-      newdata[event] <- newdata[event] + 1
+  }else if(0 %in% min(data[[event]]) & msmevent){
+    newdata[event] <- newdata[event] + 1
   }
   else{
     warning("Event values not changed in msmevent")
