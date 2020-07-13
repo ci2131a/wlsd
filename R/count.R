@@ -34,6 +34,8 @@ newdata <- aggregate(table0[,names(table0) %in% "meds"],by=list(table0[,"id"]), 
 tvarfun <- function(data,id,tvars,tfun){
   tdata <- data[,names(data) %in% c(id, tvars)]
   newdata <- aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
+  colnames(newdata)[1] <- id
+  return(newdata)
 
 }
 # code for dplyr
