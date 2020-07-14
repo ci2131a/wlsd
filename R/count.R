@@ -4,8 +4,7 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
   # input checks
   if(missing(data)) stop("Argument to data not supplied")
   if(missing(id)) stop("Argument to id not supplied")
-  if(missing(event)) stop("Argument to event not supplied")
-  if(!is.null(event)&!is.null(state)) stop("Only one argument can be given to event/state")
+  if(!is.null(event)&!is.null(state)) stop("Only one argument can be supplied in event/state")
 
   if(!is.null(event)){
     if (requireNamespace("dplyr", quietly = TRUE)) {
@@ -15,11 +14,16 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
       select <- dplyr::select(addweight,-event)
       filter <- dplyr::filter(select,dplyr::row_number()==1)
       newdata <- merge(sums,filter,by = "id")
+      newname = paste(event,".counts",sep = "")
+      newdata <- dplyr::rename(newdata, !!newname := event)
+      return(newdata)
     } else {
       # using base
+      return("Not done yet")
 
     }
   }else if(!is.null(state)){
+    return("Not done yet")
 
   }
 
