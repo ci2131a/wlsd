@@ -9,10 +9,11 @@ In the R console, run the following code to install the development version of t
 ```{r}
 devtools::install_github("ci2131a/wlsd")
 ```
-
+<!--
 If you download the development version from this repository to your local machine, you can navigate to the directory and run the following code to load the package:
-
 ```{r}
 devtools::load_all()
 ```
+-->
+
 **Note:** Be sure you have the `devtools` package installed before running the above code to avoid errors. You can install the `devtools` package through the traditional method: `install.packages("devtools")`
