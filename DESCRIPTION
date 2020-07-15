@@ -16,3 +16,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/ci2131a/wlsd
+BugReports: https://github.com/ci2131a/wlsd/issues
