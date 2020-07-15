@@ -16,7 +16,7 @@ Transforms data from longitudinal format to a format suitable for count regressi
 \examples{
 # example
 }
-\value{The returned value of the function is a data frame with new columns. The \code{event.counts} column represents the sum total of values in the \code{event} column. }
+\value{The returned value of the function is a data frame with new columns. The \code{event.counts} column represents the sum total of values in the \code{event} column. The \code{weight} column represents the number of rows for each level of \code{id}.}
 \details{
   details
 }
