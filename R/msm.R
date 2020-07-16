@@ -12,6 +12,7 @@
 # to a death state and will not be measured for
 # other variables at that time
 
+#' @export
 surv2msm <- function(data, id, time1, time2, event, tvars = NULL, msmevent = TRUE){
 # all other variables should get carried over
 
