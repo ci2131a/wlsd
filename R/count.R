@@ -61,6 +61,8 @@ tvarfun <- function(data,id,tvars,tfun){
 }
 
 
+
+
 surv2count <- function(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
 
 
