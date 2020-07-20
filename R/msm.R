@@ -51,6 +51,9 @@ surv2msm <- function(data, id, time1, time2, state, tvars = NULL, msmstate = TRU
 }
 
 
+long2msm <- function(data, id, event, state){
+
+}
 
 
 
