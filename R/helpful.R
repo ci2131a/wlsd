@@ -59,8 +59,8 @@ basedate <- function(data,id,time,event,baseline.date){
 
 }
 
-
-makestate <- function(data, events, number = TRUE){
+#' @export
+events2state <- function(data, events, number = TRUE){
   states <- interaction(data[events])
   num.levels <- as.numeric(factor(levels(states)))[factor(levels(states))]
   levels <- levels(states)
