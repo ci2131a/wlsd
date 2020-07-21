@@ -71,14 +71,15 @@ makestate <- function(data, events, number = TRUE){
   num.states <- as.numeric(states)
   data
 }
-table0$event3 <- c("no","no","yes","no","no","yes")
-state <- interaction(table0[c("event1","event2","event3")])
-state
 
-new.levels <- as.numeric(factor(levels(state)))[factor(levels(state))]
-new.levels
-old.levels <- levels(state)
-old.levels
-as.numeric(state)
-legend <- table0[c("event1","event2","event3")]
-legend
+#table0$event3 <- c("no","no","yes","no","no","yes")
+#state <- interaction(table0[c("event1","event2","event3")])
+#state
+
+#new.levels <- as.numeric(factor(levels(state)))[factor(levels(state))]
+#new.levels
+#old.levels <- levels(state)
+#old.levels
+#as.numeric(state)
+#legend <- table0[c("event1","event2","event3")]
+#legend
