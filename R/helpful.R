@@ -62,24 +62,16 @@ basedate <- function(data,id,time,event,baseline.date){
 
 makestate <- function(data, events, number = TRUE){
   states <- interaction(data[events])
-  guide <- data[events]
-  guide$state <- states
-
-
-  new.levels <- as.numeric(factor(levels(states)))[factor(levels(states))]
-  old.levels <- factor(levels(states))
-  num.states <- as.numeric(states)
-  data
+  num.levels <- as.numeric(factor(levels(states)))[factor(levels(states))]
+  levels <- levels(states)
+  if(number){
+    num.states <- as.numeric(states)
+    data$new.state <- num.states
+    guide <- cbind(levels,num.levels)
+  }else{
+    data$new.state <- states
+    guide <- cbind(levels)
+  }
+  return(list(newdata = data,guide = guide))
 }
 
-#table0$event3 <- c("no","no","yes","no","no","yes")
-#state <- interaction(table0[c("event1","event2","event3")])
-#state
-
-#new.levels <- as.numeric(factor(levels(state)))[factor(levels(state))]
-#new.levels
-#old.levels <- levels(state)
-#old.levels
-#as.numeric(state)
-#legend <- table0[c("event1","event2","event3")]
-#legend
