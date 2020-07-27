@@ -113,7 +113,7 @@ table4 <- data.frame(sid = c(1,2,3),
                      time1 = c(0,0,0),
                      time2 = c(96,33,28),
                      status = c(1,0,1))
-pander::pandoc.table(data3, style = "rmarkdown", caption = "Table 4: Right Censored Data")
+pander::pandoc.table(table4, style = "rmarkdown", caption = "Table 4: Right Censored Data")
 ```
 
 This form conveys the similar information as the previous in regard to survival time. Within the time interval $(0, 96]$, individual 1 experiences the event. With the absence of time-dependent variables, we can consolidate all follow-up intervals into one larger interval to more consicesly convey the time to event.
