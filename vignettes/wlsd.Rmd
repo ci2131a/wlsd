@@ -1,11 +1,11 @@
 ---
 title: "wlsd: Wrangling Longitudinal Survival Data"
 author: Charles Ingulli
-date: July 8, 2020
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
-  rmarkdown::html_vignette: default
-  hmtl_document: default
-  pdf_document: default
+  rmarkdown::html_vignette
+bibliography: wlsd.bib
+nocite: '@*'
 vignette: >
   %\VignetteIndexEntry{wlsd}
   %\VignetteEncoding{UTF-8}
@@ -133,10 +133,9 @@ The data formats described thus far are used for different statistical models. T
 The development version of the package currently resides on GitHub at the following link: <https://github.com/ci2131a/wlsd>. It can be installed by running the code below. This installation requires the `devtools` package. If you have not already installed `devtools`, it can be installed by the traditional means from the comprehensive R archive network (CRAN) using `install.packages("devtools")`. 
 
 
-```{r install}
+```{r install, eval=FALSE}
 devtools::install_github("ci2131a/wlsd")
 ```
-
 
 
 
