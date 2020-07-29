@@ -3,7 +3,7 @@
 \alias{long2count}
 \title{Longitudinal to Count format}
 \usage{
-use
+long2count(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean")
 }
 \description{
 Transforms data from longitudinal format to a format suitable for count regression.
@@ -12,6 +12,7 @@ Transforms data from longitudinal format to a format suitable for count regressi
   \item{data}{A data frame with relevant columns.}
   \item{id}{A character string of the identification variable name in \code{data}. Variable can be of type numeric or character.}
   \item{event}{The name of the column in \code{data} to be tallied. The name is required to be supplied as a string.}
+  \item{tvars}{Optional argument for the names of any time-varying variables included in the data set. The names }
 }
 \examples{
 # example
