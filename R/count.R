@@ -29,7 +29,7 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
       # using base instead
       weight <- aggregate(data[id], by = data[id], length)
-      colnames(weight) <- c(id,"weight")
+      colnames(weight) <- c(id,"count.weight")
       tevent <- aggregate(data[event], by = data[id], sum)
       colnames(tevent) <- c(id, paste(event,".counts", sep = ""))
       tvar <- data[!duplicated(data[id]),!names(data) %in% c(event,tvars)]
