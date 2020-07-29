@@ -10,21 +10,21 @@ Transforms data from counting process format (time1, time2, state) to the longit
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
-  \item{id}{A character string of the identification variable name in \code{data}. Variable can be of type numeric or character.}
+  \item{id}{A character string of the identification variable name in \code{data}.}
   \item{time1}{A character string of the first time point variable in \code{data}. Represents the left endpoint of the time interval.}
   \item{time2}{A character string of the second time point variable in \code{data}. Represents the right endpoint of the time interval.}
-  \item{state}{The character string for the status variable. These are assumed to be numeric (Ex: 0,1 or 1,2).}
+  \item{state}{The character string for the status variable name. These are assumed to be numeric (Ex: 0,1 or 1,2).}
   \item{tvars}{An optional argument with a single string or a vector of strings representing the variable names for any time-dependent variables.}
   \item{msmstate}{An optional argument to determine whether to change the values of the \code{state} variable. Defaults to \code{TRUE}. The \pkg{msm} package assumes that the status variable starts at 1 rather than 0. If \code{TRUE}, the state variable will be checked if it starts at 0 and bump all states up by 1 if true. Changing the argument to \code{FALSE} will leave the variable unchanged.}
 }
 \examples{
-# define data from Table 1 of the vignette
-table1  <- data.frame(id = c(1,1,1,2,2,3),
+# define data
+toydata  <- data.frame(id = c(1,1,1,2,2,3),
                       time1 = c(0,31,64,0,33,0),
                       time2 = c(31,64,96,33,59,28),
                       state = c(0,0,1,0,0,1))
 # apply function
-surv2msm(data = table1,
+surv2msm(data = toydata,
          id = "id",
          time1 = "time1",
          time2 = "time2",
@@ -35,7 +35,7 @@ surv2msm(data = table1,
 }
 \value{A data frame in longitudinal form.}
 \details{
-  For a data frame of the form :
+  For data of the form :
   \tabular{llll}{
     \code{id} \tab \code{time1} \tab \code{time2}  \tab \code{state} \cr
        1  \tab  0 \tab  31  \tab  0\cr
@@ -45,7 +45,7 @@ surv2msm(data = table1,
        2  \tab  33 \tab  59  \tab  0\cr
        3  \tab  0 \tab  28  \tab  1\cr
        }
-      will yield a data frame of the form :
+      will yield data of the form :
       \tabular{lll}{
       \code{id} \tab \code{time} \tab \code{state} \cr
       1 \tab 0 \tab 1 \cr
