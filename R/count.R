@@ -43,7 +43,22 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
     #}
   }else if(!is.null(state)){
-    return("Not done yet")
+    weight <- aggregate(data[id], by = data[id], length)
+    colnames(weight) <- c(id,"count.weight")
+    cstate <- aggregate(by = list(data[[id]],data[[state]]), x = data[,c(id,state)], FUN = length, drop = FALSE)
+    cstate <- cstate[,!names(cstate) %in% c(id)]
+    colnames(cstate) <- c(id, state, paste(state,".counts", sep = ""))
+    cstate[is.na(cstate)] <- 0
+
+    tvar <- data[!duplicated(data[id]),!names(data) %in% c(state,tvars)]
+    newdata1 <- merge(cstate, tvar, by = id)
+    newdata <- merge(newdata1, weight, by = id)
+    if(!is.null(tvars)){
+      tframe <- tvarfun(data,id,tvars,tfun)
+      newdata[tvars] <- tframe[tvars]
+    }
+    return(newdata)
+
 
   }
 
