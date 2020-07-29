@@ -2,7 +2,7 @@ Package: wlsd
 Type: Package
 Date: 2020
 Title: Wrangling Longitudinal Survival Data
-Version: 0.0.0.9010
+Version: 0.0.0.9011
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
 Description: This package provides functions to transition between different data formats for survival analysis. 
