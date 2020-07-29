@@ -48,7 +48,10 @@ knitr::kable(table1, caption = "Table 1: Longitudinal Data")
 
 ### Counting Process Format
 
-One common data setup for survival analysis is the counting process format. This stems from the counting process formulation of a Cox PH type model. The formulation that will be described makes the maximum likelihood computation easier to program. Each time interval that may contribute to this likelihood is expressed as a different row so creating the likelihood function is achieved by looking at different rows.
+One common data setup for survival analysis is the counting process format. This data format is organized by a series of time intervals where the count of the event of interest is assessed at the end of the interval and any explanatory variables are constant over the interval
+
+
+This stems from the counting process formulation of a Cox PH type model. The formulation that will be described makes the maximum likelihood computation easier to program. Each time interval that may contribute to this likelihood is expressed as a different row so creating the likelihood function is achieved by looking at different rows.
 
 This data is set up with two time variables and an event indicator. The variables describe a time interval between the two time points where the event indicator describes 
 
