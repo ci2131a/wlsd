@@ -48,7 +48,9 @@ knitr::kable(table1, caption = "Table 1: Longitudinal Data")
 
 ### Counting Process Format
 
-One common data setup for survival analysis is the counting process format. This data format is organized by a series of time intervals where the count of the event of interest is assessed at the end of the interval and any explanatory variables are constant over the interval
+One common data setup for survival analysis is the counting process format. This data format is organized by a series of time intervals and the variables associated with each interval. Each row in the data set corresponds to a specific time interval where one column defines the start of the interval while another defines the end of the interval. All other columns represent different variable values associated with the interval. This type of data set is most popular when individuals have variables that vary over time. Each time a variable value changes for an individual, it can be represented by a new row with a new time interval. Other variables may include one or more event indicator variable. 
+These represent the stat
+where the count of the event of interest is assessed at the end of the interval and any explanatory variables are constant over the interval
 
 
 This stems from the counting process formulation of a Cox PH type model. The formulation that will be described makes the maximum likelihood computation easier to program. Each time interval that may contribute to this likelihood is expressed as a different row so creating the likelihood function is achieved by looking at different rows.
@@ -138,7 +140,6 @@ The data formats described thus far are used for different statistical models. T
 # Implementation
 
 
-
 The development version of the package currently resides on GitHub at the following link: <https://github.com/ci2131a/wlsd>. It can be installed by running the code below. This installation requires the `devtools` package. If you have not already installed `devtools`, it can be installed by the traditional means from the comprehensive R archive network (CRAN) using `install.packages("devtools")`. 
 
 
@@ -146,6 +147,24 @@ The development version of the package currently resides on GitHub at the follow
 devtools::install_github("ci2131a/wlsd")
 ```
 
+
+# Utilization
+
+The `wlsd` package contains several functions for working with longitudinal survival data. This section will provide a number of working examples in order to explain how to use the package efficiently. Once the package is installed, we can library the package into our loaded memory through 
+
+```{r}
+library(wlds)
+```
+
+for ease of use. The package includes a data set from . It looks at t
+
+
+We consider 
+
+
+```{r, echo= TRUE}
+
+```
 
 
 
