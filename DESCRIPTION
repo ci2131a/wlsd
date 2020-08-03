@@ -9,6 +9,8 @@ Description: This package provides functions to transition between different dat
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports:
+    stats
 Suggests: 
     dplyr,
     survival,
