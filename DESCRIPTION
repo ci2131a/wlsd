@@ -19,3 +19,5 @@ VignetteBuilder: knitr
 URL: https://github.com/ci2131a/wlsd
 BugReports: https://github.com/ci2131a/wlsd/issues
 RoxygenNote: 7.1.0
+Depends: 
+    R (>= 4.0)
