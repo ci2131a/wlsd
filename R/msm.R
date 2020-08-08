@@ -13,7 +13,7 @@
 # other variables at that time
 
 #' @export
-surv2msm <- function(data, id, time1, time2, state, tvars = NULL, msmstate = TRUE){
+surv2msm <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRUE){
 # all other variables should get carried over
 
   # input checks
@@ -21,26 +21,27 @@ surv2msm <- function(data, id, time1, time2, state, tvars = NULL, msmstate = TRU
   if(missing(id)) stop("Argument to id not supplied")
   if(missing(time1)) stop("Argument to time1 not supplied")
   if(missing(time2)) stop("Argument to time2 not supplied")
-  if(missing(state)) stop("Argument to state not supplied")
+  if(missing(status)) stop("Argument to status not supplied")
 
 
 
   #if(!is.numeric(data[[time1]])) stop("time inputs must be numeric")
   #if(!is.numeric(data[[time2]])) stop("time inputs must be numeric")
-  if(!is.numeric(data[[state]])) stop("state variable must be numeric")
+  if(!is.numeric(data[[status]])) stop("status variable must be numeric")
 
 
-  first <- data[,!names(data) %in% c(time2,state)]
+  first <- data[,!names(data) %in% c(time2,status)]
   names(first)[names(first) == time1] <- "time"
   last <- data[,!names(data) %in% c(time1,tvars)]
   names(last)[names(last) == time2] <- "time"
   newdata <- merge(first,last,all = TRUE)
-  if(0 %in% min(data[[state]], na.rm = TRUE)){
+  #if(0 %in% min(data[[state]], na.rm = TRUE)){
     #newdata[[state]][is.na(newdata[[state]])] <- min(data[[state]], na.rm = TRUE)
-  }else if(0 %in% min(data[[state]], na.rm = TRUE) & msmstate){
-    newdata[state] <- newdata[state] + 1
+  #}else
+  if(0 %in% min(data[[status]], na.rm = TRUE) & msmstate){
+    newdata[status] <- newdata[status] + 1
   }
-  else{
+  else if(msmstate){
     warning("state values not changed in msmstate")
   }
   # returns output similar to the timeline data described in survival vignette
