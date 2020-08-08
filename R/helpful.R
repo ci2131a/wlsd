@@ -39,8 +39,8 @@ parse_date <- function(data, time){
 }
 
 
-
-basedate <- function(data,id,time,event,baseline.date){
+#' @export
+basedate <- function(data,id,time,event,baseline.date,tvars = NULL){
   # extract id and event columns
   cid <- data[id]
   ce <- data[event]
@@ -51,11 +51,14 @@ basedate <- function(data,id,time,event,baseline.date){
   first[time] <- first[baseline.date]
   # ensure the starting status is the same as the first event
   first[,event] <- min(ce)
+  # change the first value of time varying variables to be NA
+  first[tvars] <- NA
   # combine the stop times with the first start time
   newdata <- rbind(first,data)
-  # sort the data by id and time
+  # sort the data by id and time and rename rows
   sorted <- newdata[order(newdata[id], newdata[time]),]
-  sorted
+  rownames(sorted) <- 1:nrow(sorted)
+  return(sorted)
 
 }
 
