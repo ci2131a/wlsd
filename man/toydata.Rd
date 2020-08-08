@@ -3,7 +3,7 @@
 \alias{toydata}
 \title{Toy Data Set for Package}
 \usage{
-table0
+toydata
 }
 \description{
 This is a toy data set generated to explore functionality of the package with a simple example.

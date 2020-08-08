@@ -11,7 +11,7 @@ Creates a new variable in a given data frame which includes all possible combina
 \arguments{
   \item{data}{A data frame with relevant columns.}
   \item{events}{The names of the event variables as character strings in a vector.}
-  \item{number}{An logical argument to determine whether the new state variable should be left as a factor of combinations or a numer. Defaults to \code{TRUE}.}
+  \item{number}{An logical argument to determine whether the new state variable should be left as a factor of combinations or a numer representing these combinations. Defaults to \code{TRUE} which will represent factors as numeric numbers. If argument is set to \code{FALSE}, the factor combinations will be left unchanged.}
 }
 \examples{
 # example
