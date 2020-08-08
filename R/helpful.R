@@ -40,7 +40,15 @@ parse_date <- function(data, time){
 
 
 #' @export
-basedate <- function(data,id,time,event,baseline.date,tvars = NULL){
+basedate <- function(data,id,baseline.date,time,status,tvars = NULL){
+
+  # input checks
+  if(missing(data)) stop("Argument to data not supplied")
+  if(missing(id)) stop("Argument to id not supplied")
+  if(missing(baseline.date)) stop("Argument to baseline.date not supplied")
+  if(missing(time)) stop("Argument to time not supplied")
+  if(missing(status)) stop("Argument to status not supplied")
+
   # extract id and event columns
   cid <- data[id]
   ce <- data[event]
@@ -64,6 +72,12 @@ basedate <- function(data,id,time,event,baseline.date,tvars = NULL){
 
 #' @export
 events2state <- function(data, events, number = TRUE){
+
+  # input checks
+  if(missing(data)) stop("Argument to data not supplied")
+  if(missing(events)) stop("Argument to events not supplied")
+
+
   states <- interaction(data[events])
   num.levels <- as.numeric(factor(levels(states)))[factor(levels(states))]
   levels <- levels(states)
