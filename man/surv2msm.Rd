@@ -3,19 +3,19 @@
 \alias{surv2msm}
 \title{Survival to msm format}
 \usage{
-surv2msm(data, id, time1, time2, state, msmstate = TRUE)
+surv2msm(data, id, time1, time2, status, msmstate = TRUE)
 }
 \description{
-Transforms data from counting process format (time1, time2, state) to the longitudinal format (time, state).
+Transforms data from counting process format (time1, time2, status) to the longitudinal format (time, status).
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
   \item{id}{A character string of the identification variable name in \code{data}.}
   \item{time1}{A character string of the first time point variable in \code{data}. Represents the left endpoint of the time interval.}
   \item{time2}{A character string of the second time point variable in \code{data}. Represents the right endpoint of the time interval.}
-  \item{state}{The character string for the status variable name. These are assumed to be numeric (Ex: 0,1 or 1,2).}
+  \item{status}{The character string for the status variable name. These are assumed to be numeric (Ex: 0,1 or 1,2).}
   \item{tvars}{An optional argument with a single string or a vector of strings representing the variable names for any time-dependent variables.}
-  \item{msmstate}{An optional argument to determine whether to change the values of the \code{state} variable. Defaults to \code{TRUE}. The \pkg{msm} package assumes that the status variable starts at 1 rather than 0. If \code{TRUE}, the state variable will be checked if it starts at 0 and bump all states up by 1 if true. Changing the argument to \code{FALSE} will leave the variable unchanged.}
+  \item{msmstate}{An optional argument to determine whether to change the values of the \code{status} variable. Defaults to \code{TRUE}. The \pkg{msm} package assumes that the status variable starts at 1 rather than 0. If \code{TRUE}, the status variable will be checked if it starts at 0 and bump all states up by 1 if true. Changing the argument to \code{FALSE} will leave the variable unchanged.}
 }
 \examples{
 # define data
@@ -28,7 +28,7 @@ surv2msm(data = toydata,
          id = "id",
          time1 = "time1",
          time2 = "time2",
-         state = "state",
+         status = "state",
          msmstate = TRUE)
 
 
@@ -37,7 +37,7 @@ surv2msm(data = toydata,
 \details{
   For data of the form :
   \tabular{llll}{
-    \code{id} \tab \code{time1} \tab \code{time2}  \tab \code{state} \cr
+    \code{id} \tab \code{time1} \tab \code{time2}  \tab \code{status} \cr
        1  \tab  0 \tab  31  \tab  0\cr
        1  \tab  31 \tab  64  \tab  0\cr
        1  \tab  64 \tab  96  \tab  1\cr
@@ -47,7 +47,7 @@ surv2msm(data = toydata,
        }
       will yield data of the form :
       \tabular{lll}{
-      \code{id} \tab \code{time} \tab \code{state} \cr
+      \code{id} \tab \code{time} \tab \code{status} \cr
       1 \tab 0 \tab 1 \cr
       1 \tab 31 \tab 1 \cr
       1 \tab 64 \tab 1 \cr
