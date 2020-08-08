@@ -15,7 +15,7 @@ Combines variable representing the baseline date with the variable representing 
   \item{time}{A character string of the follow-up time variable in \code{data}.}
   \item{status}{The character string for the status variable name.}
   \item{tvars}{An optional argument with a single string or a vector of strings representing the variable names for any time-dependent variables.}
-
+}
 \examples{
 # define data
 basedata <- data.frame(id = c(1,1,1,2,2,3),
