@@ -3,4 +3,4 @@
 export(events2state)
 export(long2count)
 export(surv2msm)
-export(table0)
+export(toydata)
