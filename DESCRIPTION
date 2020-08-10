@@ -5,7 +5,7 @@ Title: Wrangling Longitudinal Survival Data
 Version: 0.0.0.9013
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: This package provides functions to transition between different data formats for survival analysis. 
+Description: This package provides functions to transition between different data formats suitable for survival analysis. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
