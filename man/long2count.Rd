@@ -38,7 +38,7 @@ long2count(data = toydata,
            tvars = c("var2"),
            tfun = "mean")
 }
-\value{The returned value of the function is a data frame with new columns and fewer rows. The \code{event.counts} column represents the sum total of values in the \code{event} column for each level of \code{id}. The \code{count.weight} column represents the number of rows for each level of \code{id}.}
+\value{The returned value of the function is a data frame with new columns and fewer rows. The \code{event.counts} column represents the sum total of values in the \code{event} column for each level of \code{id}. The \code{count.weight} column sums the number of rows for each level of \code{id} which should represent visits.}
 \details{
   For data of the form :
   \tabular{lllll}{
