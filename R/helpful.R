@@ -47,7 +47,7 @@ basedate <- function(data,id,baseline.date,time,status,tvars = NULL){
   if(missing(id)) stop("Argument to id not supplied")
   if(missing(baseline.date)) stop("Argument to baseline.date not supplied")
   if(missing(time)) stop("Argument to time not supplied")
-  if(missing(status)) stop("Argument to status not supplied")
+  #if(missing(status)) stop("Argument to status not supplied")
 
   # extract id and event columns
   cid <- data[id]
