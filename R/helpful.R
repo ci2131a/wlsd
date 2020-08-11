@@ -51,14 +51,14 @@ basedate <- function(data,id,baseline.date,time,status,tvars = NULL){
 
   # extract id and event columns
   cid <- data[id]
-  ce <- data[event]
+  #ce <- data[event]
 
   # subset first observation of each person
   first <- data[!duplicated(cid),]
   # change first date to be baseline date
   first[time] <- first[baseline.date]
   # ensure the starting status is the same as the first event
-  first[,event] <- min(ce)
+  #first[,event] <- min(ce)
   # change the first value of time varying variables to be NA
   first[tvars] <- NA
   # combine the stop times with the first start time
