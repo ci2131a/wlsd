@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
   collapse = FALSE,
   comment = "#>"
 )
+load("../data/LBP.rda")
 ```
 
 
@@ -138,43 +139,84 @@ This form conveys the similar information as the previous in regard to survival 
 Additional simplifications are also possible. Since all individuals start at the same time point the start variable can be ommitted. That is, in this example, since each individual enrolls in the study at time 0, we do not need the start variable column. It can then be clearly stated all individuals start at time 0  and we need only include the possible event time.
 
 
+### Count Format
+
+Count data format for count regression.
+
 ## Application
 
 The data formats described thus far are used for different statistical models. The counting process format is widely used in the `survival` package for implementing different proportional hazards models such as the Cox-proportional hazards model. The `flexsurv` package also uses this format and extends the `survival` package to add more flexible parametric proportional hazards models. The `msm` package uses the logitudinal data format to fit multi-state models. 
 
-# Implementation
 
 
-The development version of the package currently resides on GitHub at the following link: <https://github.com/ci2131a/wlsd>. It can be installed by running the code below. This installation requires the `devtools` package. If you have not already installed `devtools`, it can be installed by the traditional means from the comprehensive R archive network (CRAN) using `install.packages("devtools")`. 
-
-
-```{r install, eval=FALSE}
-devtools::install_github("ci2131a/wlsd")
-```
 
 
 # Utilization
 
-The `wlsd` package contains several functions for working with longitudinal survival data. This section will provide a number of working examples in order to explain how to use the package efficiently. Once the package is installed, we can library the package into our loaded memory through 
+The `wlsd` package contains several functions for working with longitudinal survival data. This section will provide a number of working examples in order to explain how to install and use the package efficiently.
 
-```{r}
-library(wlds)
+
+## Installation
+
+
+The development version of the package resides on GitHub at the following link: <https://github.com/ci2131a/wlsd>. It can be installed by running the code below. This installation requires the `devtools` package. If you have not already installed `devtools`, it can be installed by the traditional means from the comprehensive R archive network (CRAN) using `install.packages("devtools")`. Once `devtools` is installed you can download the `wlsd` package through the following code:
+
+
+```{r install, echo = TRUE, eval=FALSE}
+devtools::install_github("ci2131a/wlsd")
 ```
 
-for ease of use. The package includes a data set from . It looks at t
+Once the package is installed, we can add the package into our loaded memory through 
 
-
-We consider 
-
-
-```{r, echo= TRUE}
-
+```{r, echo=TRUE, results="hide", warning=FALSE}
+library(wlsd)
 ```
 
+for ease of use. Currently, the package is not available on CRAN and only exists as a developing package. Future iterations may find their way to such a platform.
 
 
+## Included Data
+
+The package makes available a data set studying low back pain (LBP) in a cohort of manufacturing workers. Information on the data set is discussed in ???. It looks at individuals working in various industrial plants across the midwest United States. Individuals enrolled are initially assessed at what is known as a baseline visit. This visit determines whether individuals qualify for the study and measure a number of explanatory variables. The qualified individuals are scheduled for approximate monthly follow-up visits where individuals are asked a series of questions relating to the level of their back pain
+
+The full data set can be accessed by the command `LBP` in R. The data for the first individual is shown below. 
 
 
+```{r, echo=TRUE}
+head(LBP, n = 17)
+```
+
+This individual contributes 17 rows of data and there are 23 columns of variables. The subject identification number is given by `sid`. The `Baseline.date` shows the date of the first assessment while `Date` marks the date of the follow-up visit. The `time_to_row` denotes the time difference in days between the baseline visit and the time of follow-up. Variables that begin with `case.` are the status indicators of interest. 
+
+
+## Longitudinal Data
+
+The LBP data is formated in the long form of longitudinal data. Each time point has a distinct row and all variables associated with that time are contained in the other columns. One exception to this claim is the baseline date variable. This information is stored in a separate column which conflicts with the previous statement. In order to deal with this, we can use the `basedate` function to consolidate information.
+
+The function will create entry for each individual with their baseline date information in the follow-up column. The function works as follows:
+
+```{r, echo=TRUE}
+longdata <- basedate(LBP,"sid","Baseline.date","Date",tvars = c("time_to_row","case.lbp","case.med","case.sc","case.lt"))
+```
+We save the resulting data frame as `longdata` and display the first individual again.
+
+```{r, echo = TRUE}
+head(longdata, n = 17)
+```
+
+Note the arguement `tvars`. This argument is used for a single or multiple variables that are time-dependent. That is the value of these variables change with time. To this argument, we supplied the `time_to_row` variable  and the status indicator variables which are all dependent on the follow-up visits. The function will add `NA`s to the values of these variables in the new row since they were unknown based on the data set. Since the `time_to_row` variable is defined to be the difference to the baseline date in days, we can replace these `NA`s with 0 as the number of days between the same date is 0. 
+
+```{r, echo = TRUE}
+is.na(longdata$time_to_row) <- 0
+```
+
+Additionally, since entrants to the study are required to be LBP free at the time of baseline visit, we can update the values in the status indicator variables to also be 0.
+
+```{r, echo=T}
+longdata[is.na(longdata)] <- 0
+```
+
+There are no other time-dependent variables in the data set so there are no other columns to change. 
 
 # References
 
