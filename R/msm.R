@@ -52,10 +52,29 @@ surv2msm <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TR
 }
 
 
-long2msm <- function(data, id, event, state){
+
+#' @export
+msm2surv <- function(data, id, time){
+
+  if(missing(data)) stop("Argument to data not supplied")
+  if(missing(id)) stop("Argument to id not supplied")
+  if(missing(time)) stop("Argument to time not supplied")
+
+
+  First <- data[duplicated(data[id],fromLast = T),c(id,time)]
+  Last <- data[duplicated(data[id]),]
+  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time)]
+
+  names(First)[names(First) == time] <- "time1"
+  names(Last)[names(Last) == time] <- "time2"
+
+
+  newdata1 <- First
+  newdata1$time2 <- Last$time2
+  newdata2 <- cbind(newdata1,Else)
+
+  return(newdata2)
 
 }
-
-
 
 
