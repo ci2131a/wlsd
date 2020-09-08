@@ -1,9 +1,9 @@
 
-\name{surv2msm}
-\alias{surv2msm}
-\title{Survival to msm format}
+\name{cp2long}
+\alias{cp2long}
+\title{Counting Process to Longitudinal format}
 \usage{
-surv2msm(data, id, time1, time2, status, msmstate = TRUE)
+cp2long(data, id, time1, time2, status, msmstate = TRUE)
 }
 \description{
 Transforms data from counting process format (time1, time2, status) to the longitudinal format (time, status).
@@ -24,7 +24,7 @@ toydata  <- data.frame(id = c(1,1,1,2,2,3),
                       time2 = c(31,64,96,33,59,28),
                       state = c(0,0,1,0,0,1))
 # apply function
-surv2msm(data = toydata,
+cp2long(data = toydata,
          id = "id",
          time1 = "time1",
          time2 = "time2",

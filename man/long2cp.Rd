@@ -1,9 +1,9 @@
 
-\name{msm2surv}
-\alias{msm2surv}
-\title{msm to survival format}
+\name{long2cp}
+\alias{long2cp}
+\title{Longitudinal to Counting Process format}
 \usage{
-msm2surv(data, id, time)
+long2cp(data, id, time)
 }
 \description{
 Transforms data from the longitudinal format (time, status) used in the msm package to the counting process format (time1, time2, status) used in the survival package.
@@ -19,7 +19,7 @@ toydata  <- data.frame(id = c(1,1,1,1,2,2,2,3,2),
                       time1 = c(0,31,64,96,0,33,59,0,28),
                       state = c(0,0,0,1,0,0,0,0,1))
 # apply function
-msm2surv(data = toydata,
+long2cp(data = toydata,
          id = "id",
          time = "time1")
 

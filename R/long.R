@@ -1,4 +1,4 @@
-# functions for converting data sets to the msm format
+# functions for converting data sets to the long format
 
 
 # transforms data from the counting process notation
@@ -13,7 +13,7 @@
 # other variables at that time
 
 #' @export
-surv2msm <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRUE){
+cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRUE){
 # all other variables should get carried over
 
   # input checks
@@ -54,7 +54,7 @@ surv2msm <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TR
 
 
 #' @export
-msm2surv <- function(data, id, time){
+long2cp <- function(data, id, time){
 
   if(missing(data)) stop("Argument to data not supplied")
   if(missing(id)) stop("Argument to id not supplied")
