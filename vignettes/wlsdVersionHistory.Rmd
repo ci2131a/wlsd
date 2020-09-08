@@ -1,0 +1,41 @@
+---
+title: "wlsd Version History"
+author: Charles Ingulli
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  rmarkdown::html_vignette
+nocite: '@*'
+vignette: >
+  %\VignetteIndexEntry{wlsd}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  collapse = FALSE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+A table guide to summary of changes between versions.
+
+```{r, echo = FALSE, results = "asis"}
+VH <- data.frame(Version = c("0.0.1.1"),
+                 Date = c("9/8/2020"),
+                 Author = c("CI"),
+                 Summary = c("Add baseline version of package for intial testing.")
+                 )
+knitr::kable(VH, caption = "Table of Changes for wlsd Versions")
+```
+
+
+
+## (Development) Version 0.0.1.1 
+
+1. Add the base version of the package with important functions.
+2. Add basic package usage vignette. 
+3. Add first version history vignette.
