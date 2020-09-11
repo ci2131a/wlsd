@@ -33,6 +33,10 @@ knitr::kable(VH, caption = "Table of Changes for wlsd Versions")
 ```
 
 
+## (Development) Version 0.0.1.2 
+
+1. Update the data set.
+
 
 ## (Development) Version 0.0.1.1 
 
