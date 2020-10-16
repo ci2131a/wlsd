@@ -1,9 +1,3 @@
-# functions for converting data sets to the long format
-
-
-# transforms data from the counting process notation
-# (i.e. times are start, stop) into the longitudinal
-# format where time is one column
 
 # a new note:
 # the counting process format takes covariates
