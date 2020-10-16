@@ -92,3 +92,20 @@ events2state <- function(data, events, number = TRUE){
   return(list(newdata = data,guide = guide))
 }
 
+
+#' @export
+takefirst <- function(data, id, event, value){
+
+  if(missing(data)) stop("Missing argument to data")
+  if(missing(id)) stop("Missing argument to id")
+  if(missing(event)) stop("Missing argument to event")
+  if(missing(value)) stop("Missing argument to value")
+
+  res <- by(data,data[id],
+            function(x)
+              if(any(x[event]==value)) x[1:which.max(x[event]==value),] else x)
+  df <- do.call(rbind, res)
+  rownames(df) <- 1:nrow(df)
+  return(df)
+
+}
