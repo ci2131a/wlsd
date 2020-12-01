@@ -24,14 +24,17 @@ knitr::opts_chunk$set(
 A table guide to summarize changes between versions.
 
 ```{r, echo = FALSE, results = "asis"}
-VH <- data.frame(Version = c("0.0.1.1","0.0.1.2"),
-                 Date = c("9/8/2020","10/16/2020"),
-                 Author = c("CI","CI"),
-                 Summary = c("Initial version of package.","Update data and functions.")
+VH <- data.frame(Version = c("0.0.1.1","0.0.1.2","0.0.2"),
+                 Date = c("9/8/2020","10/16/2020","12/1/2020"),
+                 Author = c("CI","CI","CI"),
+                 Summary = c("Initial version of package.","Update data and functions.","Update data set.")
                  )
 knitr::kable(VH, caption = "Table of Changes for wlsd Versions")
 ```
 
+
+## Development Version 0.0.2
+1. Update LBP data set so variables are parsed in proper formats.
 
 ## (Development) Version 0.0.1.2 
 
