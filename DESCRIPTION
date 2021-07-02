@@ -5,7 +5,7 @@ Title: Wrangling Longitudinal Survival Data
 Version: 0.1.0.9000
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: This package provides functions to transition between different data formats suitable for survival analysis. 
+Description: The wlsd package provides functions to transition between different data formats suitable for survival analysis. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -16,10 +16,12 @@ Suggests:
     survival,
     msm,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/ci2131a/wlsd
 BugReports: https://github.com/ci2131a/wlsd/issues
 RoxygenNote: 7.1.0
 Depends: 
     R (>= 4.0.0)
+Config/testthat/edition: 3
