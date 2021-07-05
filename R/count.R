@@ -29,9 +29,9 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
 
       # using base instead
-      weight <- aggregate(data[id], by = data[id], length)
+      weight <- stats::aggregate(data[id], by = data[id], length)
       colnames(weight) <- c(id,"count.weight")
-      tevent <- aggregate(data[event], by = data[id], sum)
+      tevent <- stats::aggregate(data[event], by = data[id], sum)
       colnames(tevent) <- c(id, paste(event,".counts", sep = ""))
       tvar <- data[!duplicated(data[id]),!names(data) %in% c(event,tvars)]
       newdata1 <- merge(tevent, tvar, by = id)
@@ -44,9 +44,9 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
     #}
   }else if(!is.null(state)){
-    weight <- aggregate(data[id], by = data[id], length)
+    weight <- stats::aggregate(data[id], by = data[id], length)
     colnames(weight) <- c(id,"count.weight")
-    cstate <- aggregate(by = list(data[[id]],data[[state]]), x = data[,c(id,state)], FUN = length, drop = FALSE)
+    cstate <- stats::aggregate(by = list(data[[id]],data[[state]]), x = data[,c(id,state)], FUN = length, drop = FALSE)
     cstate <- cstate[,!names(cstate) %in% c(id)]
     colnames(cstate) <- c(id, state, paste(state,".counts", sep = ""))
     cstate[is.na(cstate)] <- 0
@@ -70,7 +70,7 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 
 tvarfun <- function(data,id,tvars,tfun){
   tdata <- data[,names(data) %in% c(id, tvars)]
-  newdata <- aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
+  newdata <- stats::aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
   colnames(newdata) <- c(id,tvars)
   return(newdata)
 
