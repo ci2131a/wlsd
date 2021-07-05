@@ -67,6 +67,8 @@ long2cp <- function(data, id, time){
   newdata1$time2 <- Last$time2
   newdata2 <- cbind(newdata1,Else)
 
+  row.names(newdata2) <- 1:dim(newdata2)[1]
+
   return(newdata2)
 
 }
