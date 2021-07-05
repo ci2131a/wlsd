@@ -3,7 +3,7 @@
 \alias{cp2long}
 \title{Counting Process to Longitudinal format}
 \usage{
-cp2long(data, id, time1, time2, status, msmstate = TRUE)
+cp2long(data, id, time1, time2, status, tvars = NULL, msmstate = TRUE)
 }
 \description{
 Transforms data from counting process format (time1, time2, status) to the longitudinal format (time, status).
