@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette
 nocite: '@*'
 vignette: >
-  %\VignetteIndexEntry{wlsd}
+  %\VignetteIndexEntry{wlsd-version-history}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -36,7 +36,7 @@ knitr::kable(VH, caption = "Table of Changes for wlsd Versions")
 
 ## Version 0.1.0
 
-1. Add the base version of the package with important functions.
+1. Add the base version of the package used in thesis.
 2. Add basic package usage vignette. 
 3. Add first version history vignette.
 4. Ensure package can be used. (This version was successful in preparing my thesis but requires additional details before submission.)
@@ -52,4 +52,11 @@ knitr::kable(VH, caption = "Table of Changes for wlsd Versions")
 ## (Development) Version 0.0.1.1 
 
 --->
+## Version 0.1.0.9000 (Development)
+
+1. Create Tests directory.
+2. 
+
+
+
 
