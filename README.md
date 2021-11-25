@@ -1,4 +1,4 @@
-# wlsd <a href='https://github.com/ci2131a/wlsd'><img src='logo/wlsd-logo.png' align="right" height="139" /></a>
+# wlsd <a href='https://github.com/ci2131a/wlsd'><img src='logo/wlsd-logo.png' align="right" width="120" /></a>
 
 Survival analysis data may come in different usable forms. Transitioning between formats requires detailed knowledge on how information is parsed and how variables are treated. The `wlsd` package in R provides methods for transforming data between usable formats in an effort to ease this process. `wlsd` can transition between the counting process format and longitudinal or panel format. It can also be used to create data formats suitable for count data regression.
 
