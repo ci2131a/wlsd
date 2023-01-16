@@ -2,13 +2,17 @@ Package: wlsd
 Type: Package
 Date: 2021
 Title: Wrangling Longitudinal Survival Data
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: Functions to transition between different data formats suitable for survival analysis. 
+Description: Functions to transition between different data formats suitable for survival analysis.
+URL: https://github.com/ci2131a/wlsd
+BugReports: https://github.com/ci2131a/wlsd/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    R (>= 3.5.0)
 Imports:
     stats
 Suggests: 
@@ -19,9 +23,5 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://github.com/ci2131a/wlsd
-BugReports: https://github.com/ci2131a/wlsd/issues
 RoxygenNote: 7.1.0
-Depends: 
-    R (>= 3.5.0)
 Config/testthat/edition: 3
