@@ -1,3 +1,33 @@
+
+# function to setup longitudinal data for counting process
+#' @export
+long2cp <- function(data, id, time){
+
+  if(missing(data)) stop("Argument to data not supplied")
+  if(missing(id)) stop("Argument to id not supplied")
+  if(missing(time)) stop("Argument to time not supplied")
+
+
+  First <- data[duplicated(data[id],fromLast = T),c(id,time)]
+  Last <- data[duplicated(data[id]),]
+  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time)]
+
+  names(First)[names(First) == time] <- "time1"
+  names(Last)[names(Last) == time] <- "time2"
+
+
+  newdata1 <- First
+  newdata1$time2 <- Last$time2
+  newdata2 <- cbind(newdata1,Else)
+
+  row.names(newdata2) <- 1:dim(newdata2)[1]
+  # row names are not correctly reassigning the `Else` vector to be the `state` name
+
+  return(newdata2)
+
+}
+
+
 # Functions to setup longitudinal data for count data regression
 #' @export
 long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
@@ -28,19 +58,19 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
     #} else {
 
 
-      # using base instead
-      weight <- stats::aggregate(data[id], by = data[id], length)
-      colnames(weight) <- c(id,"count.weight")
-      tevent <- stats::aggregate(data[event], by = data[id], sum)
-      colnames(tevent) <- c(id, paste(event,".counts", sep = ""))
-      tvar <- data[!duplicated(data[id]),!names(data) %in% c(event,tvars)]
-      newdata1 <- merge(tevent, tvar, by = id)
-      newdata <- merge(newdata1, weight, by = id)
-      if(!is.null(tvars)){
-        tframe <- tvarfun(data,id,tvars,tfun)
-        newdata[tvars] <- tframe[tvars]
-      }
-      return(newdata)
+    # using base instead
+    weight <- stats::aggregate(data[id], by = data[id], length)
+    colnames(weight) <- c(id,"count.weight")
+    tevent <- stats::aggregate(data[event], by = data[id], sum)
+    colnames(tevent) <- c(id, paste(event,".counts", sep = ""))
+    tvar <- data[!duplicated(data[id]),!names(data) %in% c(event,tvars)]
+    newdata1 <- merge(tevent, tvar, by = id)
+    newdata <- merge(newdata1, weight, by = id)
+    if(!is.null(tvars)){
+      tframe <- tvarfun(data,id,tvars,tfun)
+      newdata[tvars] <- tframe[tvars]
+    }
+    return(newdata)
 
     #}
   }else if(!is.null(state)){
@@ -75,16 +105,3 @@ tvarfun <- function(data,id,tvars,tfun){
   return(newdata)
 
 }
-
-
-
-
-surv2count <- function(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
-
-
-}
-
-
-
-
-

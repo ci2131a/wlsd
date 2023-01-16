@@ -1,14 +1,8 @@
 
-# a new note:
-# the counting process format takes covariates
-# in intervals (t1,t2] for variables measured at time t1
-# survival studies individuals usually will transition
-# to a death state and will not be measured for
-# other variables at that time
 
 #' @export
-cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRUE){
-# all other variables should get carried over
+cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = FALSE){
+  # all other variables should get carried over
 
   # input checks
   if(missing(data)) stop("Argument to data not supplied")
@@ -18,7 +12,7 @@ cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRU
   if(missing(status)) stop("Argument to status not supplied")
 
 
-
+  # input type checks
   #if(!is.numeric(data[[time1]])) stop("time inputs must be numeric")
   #if(!is.numeric(data[[time2]])) stop("time inputs must be numeric")
   if(!is.numeric(data[[status]])) stop("status variable must be numeric")
@@ -30,7 +24,7 @@ cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRU
   names(last)[names(last) == time2] <- "time"
   newdata <- merge(first,last,all = TRUE)
   #if(0 %in% min(data[[state]], na.rm = TRUE)){
-    #newdata[[state]][is.na(newdata[[state]])] <- min(data[[state]], na.rm = TRUE)
+  #newdata[[state]][is.na(newdata[[state]])] <- min(data[[state]], na.rm = TRUE)
   #}else
   if(0 %in% min(data[[status]], na.rm = TRUE) & msmstate){
     newdata[status] <- newdata[status] + 1
@@ -47,30 +41,15 @@ cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = TRU
 
 
 
-#' @export
-long2cp <- function(data, id, time){
-
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(id)) stop("Argument to id not supplied")
-  if(missing(time)) stop("Argument to time not supplied")
 
 
-  First <- data[duplicated(data[id],fromLast = T),c(id,time)]
-  Last <- data[duplicated(data[id]),]
-  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time)]
 
-  names(First)[names(First) == time] <- "time1"
-  names(Last)[names(Last) == time] <- "time2"
+cp2count <- function(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
 
-
-  newdata1 <- First
-  newdata1$time2 <- Last$time2
-  newdata2 <- cbind(newdata1,Else)
-
-  row.names(newdata2) <- 1:dim(newdata2)[1]
-
-  return(newdata2)
 
 }
+
+
+
 
 
