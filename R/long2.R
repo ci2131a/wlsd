@@ -1,3 +1,4 @@
+# longitudinal data format transitions
 
 # function to setup longitudinal data for counting process
 #' @export
@@ -10,7 +11,7 @@ long2cp <- function(data, id, time){
 
   First <- data[duplicated(data[id],fromLast = T),c(id,time)]
   Last <- data[duplicated(data[id]),]
-  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time)]
+  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time),drop = FALSE]
 
   names(First)[names(First) == time] <- "time1"
   names(Last)[names(Last) == time] <- "time2"
@@ -21,7 +22,6 @@ long2cp <- function(data, id, time){
   newdata2 <- cbind(newdata1,Else)
 
   row.names(newdata2) <- 1:dim(newdata2)[1]
-  # row names are not correctly reassigning the `Else` vector to be the `state` name
 
   return(newdata2)
 
@@ -97,7 +97,7 @@ long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun
 }
 
 
-
+# internal for long2count()
 tvarfun <- function(data,id,tvars,tfun){
   tdata <- data[,names(data) %in% c(id, tvars)]
   newdata <- stats::aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
