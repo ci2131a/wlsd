@@ -1,42 +1,23 @@
+# helpful functions to support the package/analysis
 
 
-
-
-check_data <- function(data,id,time,event,baseline.date = NULL){
-
-  if(missing(data)) stop("Missing argument to data")
-  if(missing(id)) stop("Missing argument to id")
-  if(missing(time)) stop("Missing argument to time")
-  if(missing(event)) stop("Missing argument to status")
-
-  newtime <- parse_date(data,time)
-  newevent <- makeevent(newtime,event)
-
-  if(!is.null(baseline.date)){
-    newbase <- basedate(newtime, id, time, event, baseline.date)
-    return(newbase)
-  }else{
-    return(newevent)
+#' @export
+events2state <- function(data, events, number = TRUE, ...){
+  # take events and compute interaction between them
+  state <- interaction(data[events], ...)
+  # keep the levels of factor from interaction
+  old.levels <- levels(state)
+  if(number){ # if want numbered states, compute and print
+    num.state <- (as.numeric(state))
+    print(c("Old Levels:", old.levels))
+    print(c("New Levels:",levels(ordered(num.state))))
+    return(cbind(data,state=num.state))
+  }else{ # otherwise keep the default from interaction
+    print(old.levels)
+    return(cbind(data,state))
   }
-
 }
 
-
-# function to attempt to convert dates to numbers
-# trys for class character to date then numeric
-# or date to numeric
-parse_date <- function(data, time){
-  if(class(data[[time]])!="character"){
-    newtime <- try(as.Date(data[[time]]))
-    if(class(newtime)!="try-error"){
-      data[time] <- newtime
-    }else{
-      stop("Could not parse date")
-    }
-  }
-  data$Ntime <- as.numeric(as.Date(data[time]))-as.numeric(min(as.Date(data[time])))
-  return(data)
-}
 
 
 #' @export
@@ -68,28 +49,6 @@ basedate <- function(data,id,baseline.date,time,status,tvars = NULL){
   rownames(sorted) <- 1:nrow(sorted)
   return(sorted)
 
-}
-
-#' @export
-events2state <- function(data, events, number = TRUE){
-
-  # input checks
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(events)) stop("Argument to events not supplied")
-
-
-  states <- interaction(data[events])
-  num.levels <- as.numeric(factor(levels(states)))[factor(levels(states))]
-  levels <- levels(states)
-  if(number){
-    num.states <- as.numeric(states)
-    data$new.state <- num.states
-    guide <- cbind(levels,num.levels)
-  }else{
-    data$new.state <- states
-    guide <- cbind(levels)
-  }
-  return(list(newdata = data,guide = guide))
 }
 
 
