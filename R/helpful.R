@@ -53,18 +53,13 @@ basedate <- function(data,id,baseline.date,time,status,tvars = NULL){
 
 
 #' @export
-takefirst <- function(data, id, event, value){
-
-  if(missing(data)) stop("Missing argument to data")
-  if(missing(id)) stop("Missing argument to id")
-  if(missing(event)) stop("Missing argument to event")
-  if(missing(value)) stop("Missing argument to value")
-
-  res <- by(data,data[id],
-            function(x)
-              if(any(x[event]==value)) x[1:which.max(x[event]==value),] else x)
-  df <- do.call(rbind, res)
-  rownames(df) <- 1:nrow(df)
-  return(df)
-
+takefirst <- function(data,id,criteria.vector,criteria,...){
+  sp <- split(data,data[id],...) # split data by group id
+  # take rows up until the first occurrence of the criteria in criteria.vector
+  take <- lapply(sp, function(x) if(any(x[criteria.vector]==criteria)) x[1L:which.max(x[criteria.vector]==criteria),] else x, ...)
+  # combine it all
+  full <- do.call(rbind,take)
+  # change the new row numbers
+  rownames(full) <- 1L:nrow(full)
+  return(full)
 }
