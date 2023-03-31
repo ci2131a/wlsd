@@ -4,11 +4,6 @@
 #' @export
 long2cp <- function(data, id, time){
 
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(id)) stop("Argument to id not supplied")
-  if(missing(time)) stop("Argument to time not supplied")
-
-
   First <- data[duplicated(data[id],fromLast = T),c(id,time)]
   Last <- data[duplicated(data[id]),]
   Else <- data[duplicated(data[id]),!names(data) %in% c(id,time),drop = FALSE]
@@ -30,78 +25,77 @@ long2cp <- function(data, id, time){
 
 # Functions to setup longitudinal data for count data regression
 #' @export
-long2count <- function (data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
+long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
 
-  # input checks
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(id)) stop("Argument to id not supplied")
-  if(!is.null(event)&!is.null(state)) stop("Only one argument can be supplied in event/state")
+  # arg checks because we need specific criteria in event & state
+  # cannot have both be null because then the function doesn't do anything
+  if(is.null(event)&is.null(state)) stop("An argument needs to be supplied to either event or state.")
 
-  if(!is.null(event)){
-    # for use of dplyr
-    # the below DOES work
-    # it will not accept vector events
-    #if (requireNamespace("dplyr", quietly = TRUE)) {
-    #  ge<-dplyr::group_by(data,id)
-    #  sums <- dplyr::summarise_at(ge,dplyr::vars(event),sum)
-    #  addweight <- dplyr::mutate(ge, weight = length(id))
-    #  select <- dplyr::select(addweight,-event)
-    #  filter <- dplyr::filter(select,dplyr::row_number()==1)
-    #  newdata <- merge(sums,filter,by = "id")
-    #  newname <- paste(event,".counts",sep = "")
-    #  newdata <- dplyr::rename(newdata, !!newname := event)
-    #  if(!is.null(tvars)){
-    #    tframe <- tvarfun(data,id,tvars,tfun)
-    #    newdata[tvars] <- tframe[tvars]
-    #  }
-    #  return(newdata)
-    #} else {
+  weights <- get.weights(d=data,i=id) # get weights
+  es.counts <- es.count(d=data,i=id,e=event,s=state) # event and or state counts
+  var_type_list <- track_var_change(d=data,i=id,e=event,s=state) # split other variables into constant or non-constant category
+  # arguments supplied to event and or state are excluded from the list
+  consts.vars <- var_type_list[[1]]
+  first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = T),,drop=FALSE] # ensure 1 row of constants
+  all.tvars <- var_type_list[[2]]
+  agg.tvar <- tvarfun(d = all.tvars, i = id, f = FUN, ...) # aggregate the non-constants
+  # several merge steps
+  m1 <- merge(es.counts,weights, by = id)
+  m2 <- merge(m1, first.consts, by = id)
+  m3 <- merge(m2, agg.tvar, by = id)
+  return(m3[,intersect(union(names(data),names(m3)),names(m3))]) # return preserving original order of columns + new cols
+}
 
+# internal function for long2count() - 1
+get.weights <- function(d,i){
+  weight <- stats::aggregate(x = d[i], by = d[i], FUN = length)
+  colnames(weight) <- c(i,"count.weight")
+  return(weight)
+}
 
-    # using base instead
-    weight <- stats::aggregate(data[id], by = data[id], length)
-    colnames(weight) <- c(id,"count.weight")
-    tevent <- stats::aggregate(data[event], by = data[id], sum)
-    colnames(tevent) <- c(id, paste(event,".counts", sep = ""))
-    tvar <- data[!duplicated(data[id]),!names(data) %in% c(event,tvars)]
-    newdata1 <- merge(tevent, tvar, by = id)
-    newdata <- merge(newdata1, weight, by = id)
-    if(!is.null(tvars)){
-      tframe <- tvarfun(data,id,tvars,tfun)
-      newdata[tvars] <- tframe[tvars]
-    }
-    return(newdata)
-
-    #}
-  }else if(!is.null(state)){
-    weight <- stats::aggregate(data[id], by = data[id], length)
-    colnames(weight) <- c(id,"count.weight")
-    cstate <- stats::aggregate(by = list(data[[id]],data[[state]]), x = data[,c(id,state)], FUN = length, drop = FALSE)
-    cstate <- cstate[,!names(cstate) %in% c(id)]
-    colnames(cstate) <- c(id, state, paste(state,".counts", sep = ""))
+# internal function for long2count() - 2
+es.count<-function(d, i, e, s){
+  if(!is.null(s)){ # count the different levels for state
+    cstate <- stats::aggregate(x = d[,c(i,s)], by = list(d[[i]],d[[s]]), drop = FALSE, FUN = length)
+    cstate <- cstate[,c(1,2,4)]
+    colnames(cstate) <- c(i, s, paste(s,".counts", sep = ""))
     cstate[is.na(cstate)] <- 0
-
-    tvar <- data[!duplicated(data[id]),!names(data) %in% c(state,tvars)]
-    newdata1 <- merge(cstate, tvar, by = id)
-    newdata <- merge(newdata1, weight, by = id)
-    if(!is.null(tvars)){
-      tframe <- tvarfun(data,id,tvars,tfun)
-      newdata[tvars] <- tframe[tvars]
+    if(!is.null(e)){ # counting number of events if state is also supplied
+      cevent <- stats::aggregate(x = d[e], by = d[i], FUN = sum)
+      colnames(cevent) <- c(i, paste(e,".counts", sep = ""))
+      sne <- merge(cstate,cevent, by = i)
+      return(sne)
     }
-    return(newdata)
-
-
+    return(cstate) # state and no event return state counts
   }
-
-
+  cevent <- stats::aggregate(x = d[e], by = d[i], FUN = sum)
+  colnames(cevent) <- c(i, paste(e,".counts", sep = ""))
+  return(cevent) # no state but event then return event counts
 }
 
+# internal function for long2count() - 3
+track_var_change <- function(d, i, e, s){
+  # excluding the state and event variables
+  one <- d[!names(d) %in% c(e,s)]
+  # splitting by id
+  two <- split(one,one[i])
+  # time varying columns check
+  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(x) != 0),FUN.VALUE = logical(1)),drop = FALSE]) # check if diff is nonzero
+  tvar.combined <- do.call(rbind, tvars) # rbind lists back together
+  row.names(tvar.combined) <- 1L:nrow(tvar.combined)
+  id.tvars <- cbind(one[i],tvar.combined)
+  # constant columns
+  consts <- lapply(two, function(y) y[,vapply(y, function(x) all(diff(x) == 0),FUN.VALUE = logical(1)),drop = FALSE])
+  consts.combined <- do.call(rbind, consts)
+  row.names(consts.combined) <- 1L:nrow(consts.combined)
+  id.consts <- consts.combined
+  return(list(id.consts,id.tvars))
+}
 
-# internal for long2count()
-tvarfun <- function(data,id,tvars,tfun){
-  tdata <- data[,names(data) %in% c(id, tvars)]
-  newdata <- stats::aggregate(tdata[,names(tdata) %in% tvars],by=list(data[,id]), tfun)
-  colnames(newdata) <- c(id,tvars)
+# internal function for long2count() - 4
+tvarfun <- function(d,i,f,...){
+  # aggregate the non-constant variables into constant based on function
+  newdata <- stats::aggregate(d[!names(d) %in% i],by=d[i], FUN = f, ...)
   return(newdata)
-
 }
+
