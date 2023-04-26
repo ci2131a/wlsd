@@ -33,7 +33,7 @@ long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
 
   weights <- get.weights(d=data,i=id) # get weights
   es.counts <- es.count(d=data,i=id,e=event,s=state) # event and or state counts
-  var_type_list <- track_var_change(d=data,i=id,e=event,s=state) # split other variables into constant or non-constant category
+  var_type_list <- track_var_change(d=data,i=id,o=c(event,state)) # split other variables into constant or non-constant category
   # arguments supplied to event and or state are excluded from the list
   consts.vars <- var_type_list[[1]]
   first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = T),,drop=FALSE] # ensure 1 row of constants
@@ -73,24 +73,7 @@ es.count<-function(d, i, e, s){
   return(cevent) # no state but event then return event counts
 }
 
-# internal function for long2count() - 3
-track_var_change <- function(d, i, e, s){
-  # excluding the state and event variables
-  one <- d[!names(d) %in% c(e,s)]
-  # splitting by id
-  two <- split(one,one[i])
-  # time varying columns check
-  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(x) != 0),FUN.VALUE = logical(1)),drop = FALSE]) # check if diff is nonzero
-  tvar.combined <- do.call(rbind, tvars) # rbind lists back together
-  row.names(tvar.combined) <- 1L:nrow(tvar.combined)
-  id.tvars <- cbind(one[i],tvar.combined)
-  # constant columns
-  consts <- lapply(two, function(y) y[,vapply(y, function(x) all(diff(x) == 0),FUN.VALUE = logical(1)),drop = FALSE])
-  consts.combined <- do.call(rbind, consts)
-  row.names(consts.combined) <- 1L:nrow(consts.combined)
-  id.consts <- consts.combined
-  return(list(id.consts,id.tvars))
-}
+
 
 # internal function for long2count() - 4
 tvarfun <- function(d,i,f,...){
