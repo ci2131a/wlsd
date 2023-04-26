@@ -1,31 +1,28 @@
 
 
 #' @export
-cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = FALSE){
-  # all other variables should get carried over
+cp2long <- function(data, id, time1, time2, status, fill = FALSE, msmstate = FALSE){
 
-  # input checks
-  if(missing(data)) stop("Argument to data not supplied")
-  if(missing(id)) stop("Argument to id not supplied")
-  if(missing(time1)) stop("Argument to time1 not supplied")
-  if(missing(time2)) stop("Argument to time2 not supplied")
-  if(missing(status)) stop("Argument to status not supplied")
+  if (fill){
+    # split constant and time varying variables
+    var_list <- track_var_change(d = data, i = id, o = NULL)
+    const_var <- var_list[[1]]
+    t_var <- var_list[[2]]
 
+    first <- data[,names(subdata) %in% union(c(id,time1),names(const_var))]
+    names(first)[names(first) == time1] <- "time"
+    last <- subdata[,(!names(subdata) %in% union(time1,names(const_var))) & id]
+    names(last)[names(last) == time2] <- "time"
+    newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
+  }
+  else {
+    first <- data[,names(data) %in% c(id,time1)]
+    names(first)[names(first) == time1] <- "time"
+    last <- data[,!names(data) %in% c(time1)]
+    names(last)[names(last) == time2] <- "time"
+    newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
+  }
 
-  # input type checks
-  #if(!is.numeric(data[[time1]])) stop("time inputs must be numeric")
-  #if(!is.numeric(data[[time2]])) stop("time inputs must be numeric")
-  if(!is.numeric(data[[status]])) stop("status variable must be numeric")
-
-
-  first <- data[,!names(data) %in% c(time2,status)]
-  names(first)[names(first) == time1] <- "time"
-  last <- data[,!names(data) %in% c(time1,tvars)]
-  names(last)[names(last) == time2] <- "time"
-  newdata <- merge(first,last,all = TRUE)
-  #if(0 %in% min(data[[state]], na.rm = TRUE)){
-  #newdata[[state]][is.na(newdata[[state]])] <- min(data[[state]], na.rm = TRUE)
-  #}else
   if(0 %in% min(data[[status]], na.rm = TRUE) & msmstate){
     newdata[status] <- newdata[status] + 1
   }
@@ -35,19 +32,8 @@ cp2long <- function(data, id, time1, time2, status, tvars = NULL, msmstate = FAL
   # returns output similar to the timeline data described in survival vignette
   # all timevarying covariates are required to be specified to avoid duplicated rows in merge
   return(newdata)
-
-
 }
 
-
-
-
-
-
-cp2count <- function(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean"){
-
-
-}
 
 
 
