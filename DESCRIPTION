@@ -5,7 +5,7 @@ Title: Wrangling Longitudinal Survival Data
 Version: 0.1.0
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: Functions to transition between different data formats suitable for survival analysis.
+Description: A suite of functions that supports transitions between different data formats suitable for survival analysis.
 URL: https://github.com/ci2131a/wlsd
 BugReports: https://github.com/ci2131a/wlsd/issues
 License: GPL-3
@@ -15,10 +15,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     stats
-Suggests: 
-    dplyr,
-    survival,
-    msm,
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
