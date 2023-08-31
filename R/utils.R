@@ -2,20 +2,21 @@
 
 
 #' @export
-events2state <- function(data, events, number = TRUE, ...){
+events2state <- function(data, events, number = TRUE, drop = TRUE, ...){
   # take events and compute interaction between them
-  state <- interaction(data[events], ...)
+  state <- interaction(data[events], drop = drop, ...)
   # keep the levels of factor from interaction
   old.levels <- levels(state)
   if(number){ # if want numbered states, compute and print
-    num.state <- (as.numeric(state))
-    print(c("Combination Levels:", old.levels))
-    print(paste0(c("Numbered Levels:",levels(ordered(num.state)))))
-    return(cbind(data,state=num.state))
+    state <- as.numeric(state)
+    cat("Combination Levels:", old.levels,"\n")
+    cat("Numbered Levels:", sort(as.numeric(as.factor(old.levels))),"\n")
   }else{ # otherwise keep the default from interaction
-    print(c("Combination Levels:", old.levels))
-    return(cbind(data,state))
+    cat("Combination Levels:", old.levels, "\n")
   }
+  output <- cbind(data,state)
+  names(output) <- make.names(names(output), unique = TRUE)
+  return(output)
 }
 
 
@@ -44,10 +45,10 @@ basedate <- function(data,id){
 
 
 #' @export
-takefirst <- function(data,id,criteria.vector,criteria,...){
+takefirst <- function(data,id,criteria.column,criteria,...){
   sp <- split(data,data[id],...) # split data by group id
-  # take rows up until the first occurrence of the criteria in criteria.vector
-  take <- lapply(sp, function(x) if(any(x[criteria.vector]==criteria)) x[1L:which.max(x[criteria.vector]==criteria),] else x, ...)
+  # take rows up until the first occurrence of the criteria in criteria.column
+  take <- lapply(sp, function(x) if(any(x[criteria.column]==criteria)) x[1L:which.max(x[criteria.column]==criteria),] else x, ...)
   # combine it all
   full <- do.call(rbind,take)
   # change the new row numbers
@@ -68,25 +69,18 @@ track_var_change <- function(d, i, o){
     one <- d
   }
   # splitting by id
-  two <- split(one,one[i])
+  two <- split(one,one[i]) # a list where each element is a dataframe of rows for the id
   # time varying columns check
-  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(x) != 0),FUN.VALUE = logical(1)),drop = FALSE]) # check if diff is nonzero
-  #tvars gives the list of time varying variables based on what changes row to row for all individuals
-
-  ###### used when combining split list of tvars from lapply on two ######
-  #tvar.combined <- do.call(rbind, tvars) # rbind lists back together
-  #row.names(tvar.combined) <- 1L:nrow(tvar.combined)
-  #######################################################################
+  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(x) != 0),FUN.VALUE = logical(1)),drop = FALSE]) # checks if diff is nonzero
+  #tvars gives the list of time varying variables based on what changes row to row for each individual across all individuals
 
   # now we take the names from tvars and subset one
-  tvars.names <- Reduce(union, lapply(tvars, names)) # tvars may have nulls for 1 row individuals so take union
-  id.tvars <- one[,union(i,names(tvars[[1]])), drop = FALSE]
+  tvars.names <- Reduce(union, lapply(tvars, names))
+  # tvars may have nulls for 1 row individuals so take union for all combinations of variable names that are different row to row
 
   # constant columns
   consts <- lapply(two, function(y) y[,vapply(y, function(x) all(diff(x) == 0),FUN.VALUE = logical(1)),drop = FALSE])
-  #consts.combined <- do.call(rbind, consts)
-  #row.names(consts.combined) <- 1L:nrow(consts.combined)
+  # checks rows between each individual to make sure there is no difference in rows
   consts.names <- Reduce(intersect, lapply(consts, names)) # constants will always have ID as constant so take intersect
-  id.consts <- one[, union(i, consts.names), drop = FALSE]
-  return(list(id.consts,id.tvars))
+  return(list(consts.names,tvars.names))
 }
