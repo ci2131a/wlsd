@@ -30,14 +30,15 @@ long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
   # arg checks because we need specific criteria in event & state
   # cannot have both be null because then the function doesn't do anything
   if(is.null(event)&is.null(state)) stop("An argument needs to be supplied to either event or state.")
+  if(missing(FUN)) FUN <- mean
 
   weights <- get.weights(d=data,i=id) # get weights
   es.counts <- es.count(d=data,i=id,e=event,s=state) # event and or state counts
   var_type_list <- track_var_change(d=data,i=id,o=c(event,state)) # split other variables into constant or non-constant category
   # arguments supplied to event and or state are excluded from the list
-  consts.vars <- var_type_list[[1]]
-  first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = T),,drop=FALSE] # ensure 1 row of constants
-  all.tvars <- var_type_list[[2]]
+  consts.vars <- data[union(id,var_type_list[[1]])] # if an omit option is added then those variable names can be included here
+  first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = F),,drop=FALSE] # ensure 1 row of constants taking the first row of each individual
+  all.tvars <- data[union(id,var_type_list[[2]])]
   agg.tvar <- tvarfun(d = all.tvars, i = id, f = FUN, ...) # aggregate the non-constants
   # several merge steps
   m1 <- merge(es.counts,weights, by = id)
