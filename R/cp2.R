@@ -6,12 +6,12 @@ cp2long <- function(data, id, time1, time2, status, fill = FALSE, msmstate = FAL
   if (fill){
     # split constant and time varying variables
     var_list <- track_var_change(d = data, i = id, o = NULL)
-    const_var <- var_list[[1]]
-    t_var <- var_list[[2]]
+    const_var <- var_list[[1]] # pull out constants
+    t_var <- var_list[[2]] # pull out time
 
-    first <- data[,names(subdata) %in% union(c(id,time1),names(const_var))]
+    first <- data[,names(data) %in% union(c(id,time1),const_var)]
     names(first)[names(first) == time1] <- "time"
-    last <- subdata[,(!names(subdata) %in% union(time1,names(const_var))) & id]
+    last <- data[,(!names(data) %in% union(time1,const_var)) & id]
     names(last)[names(last) == time2] <- "time"
     newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
   }
