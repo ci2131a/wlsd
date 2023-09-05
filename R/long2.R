@@ -44,7 +44,11 @@ long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
   m1 <- merge(es.counts,weights, by = id)
   m2 <- merge(m1, first.consts, by = id)
   m3 <- merge(m2, agg.tvar, by = id)
-  return(m3[,intersect(union(names(data),names(m3)),names(m3))]) # return preserving original order of columns + new cols
+  # return preserving original order of columns + new cols
+  output <- m3[,intersect(union(names(data),names(m3)),names(m3))]
+  # ensure that column names are unique
+  names(output) <- make.names(names(output), unique = TRUE)
+  return(output)
 }
 
 # internal function for long2count() - 1
