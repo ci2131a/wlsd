@@ -2,13 +2,18 @@
 \name{LBP}
 \alias{LBP}
 \title{Low Back Pain Data Set}
+
+\description{
+Data set used to investigate the risk of low back pain (LBP) in a cohort of manufaturing workers collected by the LBP Research Consortium.
+}
+
 \usage{
 LBP
+data(LBP, package="wlsd")
 }
-\description{
-This is used to investigate the risk of low back pain (LBP) in a cohort of manufaturing workers collected by the LBP Research Consortium.
-}
+
 \format{
+A long form longidudinal data frame on the following variables:
   \tabular{lll}{
     \strong{Variable} \tab \strong{Description} \tab \strong{Class} \cr
     sid: \tab The subject identification variable for individuals. \tab Factor \cr
@@ -38,3 +43,17 @@ This is used to investigate the risk of low back pain (LBP) in a cohort of manuf
   }
 }
 
+\details{
+
+Case definitions: `case.lbp`, `case.med`, `case.sc`, and `case.lt`
+
+Baseline observation data was missing at the time of construction so it was assumed that each individual was event free at baseline. This means that the first row of case definition values for all individuals are asummed values and were input manually. This was done to ensure that the data had a complete record of observations that started at baseline and continued until individuals were lost to follow-up. As individuals were assumed to be event free at baseline, their case definition values were set to 0 to indicate that they do not have an instance of the respective case definition.
+}
+\source{
+  Author (Year),
+  Title.
+  \emph{Journal} \bold{volume}, issue?.
+}
+\examples{
+
+}

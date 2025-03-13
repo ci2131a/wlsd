@@ -11,7 +11,7 @@ Takes all rows of a data frame up to and including the first occurrence of a sup
 \arguments{
   \item{data}{A data frame with relevant columns.}
   \item{id}{A character string of the identification vector name defining groups in \code{data}.}
-  \item{criteria.vector}{The name as a character string of the vector in \code{data} where the criteria is located.}
+  \item{criteria.column}{The name as a character string of the column in \code{data} where the criteria is located.}
   \item{criteria}{The value of the cutoff for subsetting.}
   \item{...}{Further arguments to be supplied to internal functions and or methods.}
 }

@@ -3,40 +3,21 @@
 \alias{long2count}
 \title{Longitudinal to Count format}
 \usage{
-long2count(data, id, event = NULL, state = NULL, tvars = NULL, tfun = "mean")
+long2count(data, id, event = NULL, state = NULL, FUN, ...)
 }
 \description{
-Transforms data from longitudinal format to a format suitable for count regression.
+Transforms longitudinal data to a format suitable for count regression by aggregating notable columns over time.
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
   \item{id}{A character string of the identification variable name in \code{data}.}
   \item{event}{The name(s) of the event column(s) in \code{data} to be tallied. The name(s) is required to be supplied as a string. The elements of this argument are assumed to be numeric and are summed for each identification level from \code{id}.}
   \item{state}{The name of the state variable in \code{data}. This argument is used if the event of interest is a numeric or non-numeric series of states. Each of these levels will be tallied for each level of the \code{id}.}
-  \item{tvars}{Optional argument for the name(s) of any time-dependent variables included in the data set. The name(s) should be supplied as a single string or a vector of strings.}
-  \item{tfun}{The summary function to be applied to all time-depentent variables listed in \code{tvars}.}
+  \item{FUN}{The summary function to be applied to all time-depentent columns (wrapper for argument in \code{stats::aggregate}). If nothing is supplied, then \code{mean} will be used.}
+  \item{...}{Additional arguments supplied to \code{stats::aggregate}.}
 }
 \examples{
-# define data
-toydata  <- data.frame(id = c(1,1,1,2,2,3),
-                      time = c(0,31,64,0,33,0),
-                      status = c(0,1,1,0,0,1),
-                      var1 = c(24,24,24,18,18,39),
-                      var2 = c(2.1,2.4,3.9,4.2,1.6,5.5))
 
-# apply function for event
-long2count(data = toydata,
-           id = "id",
-           event = "status",
-           tvars = c("var2"),
-           tfun = "mean")
-
-# apply function for state
-long2count(data = toydata,
-           id = "id",
-           state = "status",
-           tvars = c("var2"),
-           tfun = "mean")
 }
 \value{The returned value of the function is a data frame with new columns and fewer rows. The \code{event.counts} column represents the sum total of values in the \code{event} column for each level of \code{id}. The \code{count.weight} column sums the number of rows for each level of \code{id} which should represent visits.}
 \details{
