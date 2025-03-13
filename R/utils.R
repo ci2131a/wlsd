@@ -66,19 +66,22 @@ track_var_change <- function(d, i, o){
   else{
     one <- d
   }
+  tryCatch({
   # splitting by id
   two <- split(one,one[i]) # a list where each element is a dataframe of rows for the id
   # time varying columns check
-  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(x) != 0),FUN.VALUE = logical(1)),drop = FALSE]) # checks if diff is nonzero
+  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(as.numeric(as.factor(x))) != 0, na.rm = TRUE),FUN.VALUE = logical(1)),drop = FALSE]) # checks if diff is nonzero
   #tvars gives the list of time varying variables based on what changes row to row for each individual across all individuals
 
   # now we take the names from tvars and subset one
   tvars.names <- Reduce(union, lapply(tvars, names))
   # tvars may have nulls for 1 row individuals so take union for all combinations of variable names that are different row to row
 
-  # constant columns
-  consts <- lapply(two, function(y) y[,vapply(y, function(x) all(diff(x) == 0),FUN.VALUE = logical(1)),drop = FALSE])
-  # checks rows between each individual to make sure there is no difference in rows
-  consts.names <- Reduce(intersect, lapply(consts, names)) # constants will always have ID as constant so take intersect
+  # after computing tvars, the constants will be the difference between the tvars and original names
+  consts.names <- setdiff(names(one), tvars.names)
   return(list(consts.names,tvars.names))
+  },error = function(e){
+    warning(e,"\nError in splitting columns -- treating all columns as constant.")
+    return(list(names(one), NULL))
+  })
 }

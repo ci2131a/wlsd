@@ -34,21 +34,35 @@ long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
 
   weights <- get.weights(d=data,i=id) # get weights
   es.counts <- es.count(d=data,i=id,e=event,s=state) # event and or state counts
-  var_type_list <- track_var_change(d=data,i=id,o=c(event,state)) # split other variables into constant or non-constant category
-  # arguments supplied to event and or state are excluded from the list
-  consts.vars <- data[union(id,var_type_list[[1]])] # if an omit option is added then those variable names can be included here
-  first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = F),,drop=FALSE] # ensure 1 row of constants taking the first row of each individual
-  all.tvars <- data[union(id,var_type_list[[2]])]
-  agg.tvar <- tvarfun(d = all.tvars, i = id, f = FUN, ...) # aggregate the non-constants
-  # several merge steps
+  # merge 1
   m1 <- merge(es.counts,weights, by = id)
-  m2 <- merge(m1, first.consts, by = id)
-  m3 <- merge(m2, agg.tvar, by = id)
+  # try to split columns into constant and time-varying
+  tryCatch({
+    var_type_list <- track_var_change(d=data,i=id,o=c(event,state)) # split other variables into constant or non-constant category
+    # arguments supplied to event and or state are excluded from the list
+    consts.vars <- data[union(id,var_type_list[[1]])] # if an omit option is added then those variable names can be included here
+    first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = F),,drop=FALSE] # ensure 1 row of constants taking the first row of each individual
+    all.tvars <- data[union(id,var_type_list[[2]])]
+    agg.tvar <- tvarfun(d = all.tvars, i = id, f = FUN, ...) # aggregate the non-constants
+
+    m2 <- merge(m1, first.consts, by = id)
+    m3 <- merge(m2, agg.tvar, by = id)
+  }, error = function(e){
+    warning(e,"\nError in splitting columns -- treating all columns as constant.")
+
+  }, finally = {
+    noncoerced.vars <- data[!duplicated(data[id], fromLast = F),!names(data) %in% c(event, state),drop=FALSE]
+    m3 <- merge(m1, noncoerced.vars, by = id)
+
+
+  })
   # return preserving original order of columns + new cols
   output <- m3[,intersect(union(names(data),names(m3)),names(m3))]
   # ensure that column names are unique
   names(output) <- make.names(names(output), unique = TRUE)
   return(output)
+
+
 }
 
 # internal function for long2count() - 1
