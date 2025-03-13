@@ -1,4 +1,4 @@
-# wlsd <a href='https://github.com/ci2131a/wlsd'><img src='logo/wlsd-logo.png' align="right" width="120" /></a>
+# wlsd <a href='https://github.com/ci2131a/wlsd'><img src='logo/wlsd-logo.png' align="right" height="138" /></a>
 
 ## Overview
 
