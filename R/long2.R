@@ -2,102 +2,104 @@
 
 # function to setup longitudinal data for counting process
 #' @export
-long2cp <- function(data, id, time){
+long2cp <- function(data, id, time, drop = FALSE){
 
-  First <- data[duplicated(data[id],fromLast = T),c(id,time)]
-  Last <- data[duplicated(data[id]),]
-  Else <- data[duplicated(data[id]),!names(data) %in% c(id,time),drop = FALSE]
+  # pull all rows except the last as the starts (per group)
+  starts <- data[duplicated(data[id],fromLast = T),c(id,time)]
+  # all rows except the first are the stops (per group)
+  stops <- data[duplicated(data[id]),]
+  # this data frame will have all other columns for everything except first row (added later)
+  elses <- data[duplicated(data[id]),!names(data) %in% c(id,time),drop = FALSE]
 
-  names(First)[names(First) == time] <- "time1"
-  names(Last)[names(Last) == time] <- "time2"
+  # rename the times for start and stop
+  names(starts)[names(starts) == time] <- "time1"
+  names(stops)[names(stops) == time] <- "time2"
 
+  # combine everything
+  newdata1 <- starts
+  newdata1$time2 <- stops$time2
+  newdata2 <- cbind(newdata1,elses)
 
-  newdata1 <- First
-  newdata1$time2 <- Last$time2
-  newdata2 <- cbind(newdata1,Else)
+  # if we drop the groups with 1 row the above code will ignore those so we can re-index and return
+  if(drop){
 
-  row.names(newdata2) <- 1:dim(newdata2)[1]
+    row.names(newdata2) <- 1:dim(newdata2)[1]
 
-  return(newdata2)
+    return(newdata2)
+  }
+  else{ # otherwise...
+
+    # pull out groups which have 1 row
+    one.rowers <- data[which(data[[id]] %in% newdata2[[id]] == FALSE),]
+    # make new column for stop time which is the same as time1
+    one.rowers["time2"] <- one.rowers[time]
+    # rename the original time to be the time1
+    names(one.rowers)[names(one.rowers) == time] <- "time1"
+    # match order of one rows with the newdata2
+    one.rowers <- one.rowers[names(newdata2)]
+    # column bind the 2 data sets since columns should match
+    full.data <- rbind(newdata2, one.rowers)
+
+    # change the index
+    row.names(full.data) <- 1:dim(full.data)[1]
+
+    return(full.data)
+  }
 
 }
 
-
 # Functions to setup longitudinal data for count data regression
 #' @export
-long2count <- function(data, id, event = NULL, state = NULL, FUN, ...){
+long2count <- function(data, id, event = NULL, state = NULL, FUN = mean, ...){
 
   # arg checks because we need specific criteria in event & state
   # cannot have both be null because then the function doesn't do anything
   if(is.null(event)&is.null(state)) stop("An argument needs to be supplied to either event or state.")
-  if(missing(FUN)) FUN <- mean
+  if(!is.function(FUN)) stop("FUN must be a function")
+  if(length(state)>1) stop("Multiple arguments supplied to state but only needs one")
 
   weights <- get.weights(d=data,i=id) # get weights
   es.counts <- es.count(d=data,i=id,e=event,s=state) # event and or state counts
   # merge 1
   m1 <- merge(es.counts,weights, by = id)
-  # try to split columns into constant and time-varying
+
+  # test if there are other columns to split
+  if(length(setdiff(names(data),c(id, event, state))) == 0){
+    # do something for only the id and event/state columns that need to be counted
+    return(m1) # presumably return m1
+  }
+  # else: try to split columns into constant and time-varying
   tryCatch({
-    var_type_list <- track_var_change(d=data,i=id,o=c(event,state)) # split other variables into constant or non-constant category
+    # split other variables into constant or non-constant category
     # arguments supplied to event and or state are excluded from the list
+    var_type_list <- track_var_change(d=data,i=id,o=c(event,state))
+
+    # for any constants, take the first row for aggregated data frame (all constant means all rows are the same)
     consts.vars <- data[union(id,var_type_list[[1]])] # if an omit option is added then those variable names can be included here
     first.consts <- consts.vars[!duplicated(consts.vars[id],fromLast = F),,drop=FALSE] # ensure 1 row of constants taking the first row of each individual
-    all.tvars <- data[union(id,var_type_list[[2]])]
-    agg.tvar <- tvarfun(d = all.tvars, i = id, f = FUN, ...) # aggregate the non-constants
+
+    # time varying handling
+    # rename list element for use in for loop
+    time_names <- var_type_list[[2]]
+    all.tvars <- data[union(id,time_names)]
+    agg.tvar <- stats::aggregate(all.tvars[!names(all.tvars) %in% id], by = all.tvars[id], FUN = FUN, ...)
 
     m2 <- merge(m1, first.consts, by = id)
     m3 <- merge(m2, agg.tvar, by = id)
+
   }, error = function(e){
     warning(e,"\nError in splitting columns -- treating all columns as constant.")
-
-  }, finally = {
     noncoerced.vars <- data[!duplicated(data[id], fromLast = F),!names(data) %in% c(event, state),drop=FALSE]
     m3 <- merge(m1, noncoerced.vars, by = id)
-
-
+  }, finally = {
+    # return preserving original order of columns + new cols
+    output <- m3[,intersect(union(names(data),names(m3)),names(m3))]
+    # ensure that column names are unique
+    names(output) <- make.names(names(output), unique = TRUE)
+    sorted <- output[order(output[[id]]),, drop = FALSE]
+    return(sorted)
   })
-  # return preserving original order of columns + new cols
-  output <- m3[,intersect(union(names(data),names(m3)),names(m3))]
-  # ensure that column names are unique
-  names(output) <- make.names(names(output), unique = TRUE)
-  return(output)
-
 
 }
 
-# internal function for long2count() - 1
-get.weights <- function(d,i){
-  weight <- stats::aggregate(x = d[i], by = d[i], FUN = length)
-  colnames(weight) <- c(i,"count.weight")
-  return(weight)
-}
-
-# internal function for long2count() - 2
-es.count<-function(d, i, e, s){
-  if(!is.null(s)){ # count the different levels for state
-    cstate <- stats::aggregate(x = d[,c(i,s)], by = list(d[[i]],d[[s]]), drop = FALSE, FUN = length)
-    cstate <- cstate[,c(1,2,4)]
-    colnames(cstate) <- c(i, s, paste(s,".counts", sep = ""))
-    cstate[is.na(cstate)] <- 0
-    if(!is.null(e)){ # counting number of events if state is also supplied
-      cevent <- stats::aggregate(x = d[e], by = d[i], FUN = sum)
-      colnames(cevent) <- c(i, paste(e,".counts", sep = ""))
-      sne <- merge(cstate,cevent, by = i)
-      return(sne)
-    }
-    return(cstate) # state and no event return state counts
-  }
-  cevent <- stats::aggregate(x = d[e], by = d[i], FUN = sum)
-  colnames(cevent) <- c(i, paste(e,".counts", sep = ""))
-  return(cevent) # no state but event then return event counts
-}
-
-
-
-# internal function for long2count() - 4
-tvarfun <- function(d,i,f,...){
-  # aggregate the non-constant variables into constant based on function
-  newdata <- stats::aggregate(d[!names(d) %in% i],by=d[i], FUN = f, ...)
-  return(newdata)
-}
 
