@@ -43,6 +43,7 @@ cp2long <- function(data, id, time1, time2, fill = FALSE){
     names(last)[names(last) == time2] <- "time"
     newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
   }
+  names(newdata) <- make.names(names(newdata), unique = TRUE)
   # returns output similar to the timeline data described in survival vignette
   # all timevarying covariates are required to be specified to avoid duplicated rows in merge
   return(newdata)
