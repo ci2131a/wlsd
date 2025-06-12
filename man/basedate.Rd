@@ -9,16 +9,14 @@ basedate(data,id)
 Creates a new row of values for subjects representing baseline observations in a data set of follow-up observations.
 }
 \arguments{
-  \item{data}{A data frame with relevant columns.}
-  \item{id}{A character string of the identification column name in \code{data}.}
+  \item{data}{Data frame with relevant columns.}
+  \item{id}{Character string of the identification column name in \code{data}.}
 }
 \examples{
-
-
-
+basedate(long_data, "id")
 }
-\value{A data frame in longitudinal form.}
+\value{A data frame similar to the input.}
 \details{
-
+  Adds a new row for each level of the `id` column. Internal functions will try to determine any constant columns by checking for consistency within `id` groups in order to fill in some of the blanks.
 }
 

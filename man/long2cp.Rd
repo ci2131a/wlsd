@@ -1,9 +1,9 @@
 
 \name{long2cp}
 \alias{long2cp}
-\title{Longitudinal to Counting Process format}
+\title{Long to Counting Process format}
 \usage{
-long2cp(data, id, time)
+long2cp(data, id, time, drop = FALSE)
 }
 \description{
 Transforms data from the longitudinal format (time, status) used in the msm package to the counting process format (time1, time2, status) used in the survival package.
@@ -12,46 +12,13 @@ Transforms data from the longitudinal format (time, status) used in the msm pack
   \item{data}{A data frame with relevant columns.}
   \item{id}{A character string of the identification variable name in \code{data}.}
   \item{time}{A character string of the time variable in \code{data}.}
+  \item{drop}{Logical indicator for whether any `id` groups with insufficient rows should be dropped from the output. Default is `FALSE`.}
 }
 \examples{
-# define data
-toydata  <- data.frame(id = c(1,1,1,1,2,2,2,3,2),
-                      time1 = c(0,31,64,96,0,33,59,0,28),
-                      state = c(0,0,0,1,0,0,0,0,1))
-# apply function
-long2cp(data = toydata,
-         id = "id",
-         time = "time1")
-
-
+long2cp(data = long_data, id = "id", time = "time")
 }
-\value{A data frame in counting process form.}
+\value{A data frame in counting process format.}
 \details{
-  For data of the form :
-    \tabular{lll}{
-      \code{id} \tab \code{time} \tab \code{status} \cr
-      1 \tab 0 \tab 0 \cr
-      1 \tab 31 \tab 0 \cr
-      1 \tab 64 \tab 0 \cr
-      1 \tab 96 \tab 1 \cr
-      2 \tab 0 \tab 0 \cr
-      2 \tab 33 \tab 0 \cr
-      2 \tab 59 \tab 0 \cr
-      3 \tab 0 \tab 0 \cr
-      3 \tab 28 \tab 1 \cr
-      }
-      will yield data of the form :
-
-  \tabular{llll}{
-    \code{id} \tab \code{time1} \tab \code{time2}  \tab \code{status} \cr
-       1  \tab  0 \tab  31  \tab  0\cr
-       1  \tab  31 \tab  64  \tab  0\cr
-       1  \tab  64 \tab  96  \tab  1\cr
-       2  \tab  0 \tab  33  \tab  0\cr
-       2  \tab  33 \tab  59  \tab  0\cr
-       3  \tab  0 \tab  28  \tab  1\cr
-       }
-
-      through the code provided in example.
+  The transition is primarily done by shifting the column supplied to the `time` argument into two new columns for a column-wise time definition and adding back any remaining columns. The `drop` argument can be used for any `id` levels that may only have one row where a two column time data set might not suit them. Since there is not any useful gained from going from one time to the same time, it may be useful to just drop those `id` levels altogether
 }
 
