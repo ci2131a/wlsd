@@ -30,7 +30,7 @@ The development version of this package is maintained on GitHub.
 
 In the R console, run the following code to install the development version of the package:
 
-```{r}
+```{r, eval = FALSE}
 devtools::install_github("ci2131a/wlsd")
 ```
 
