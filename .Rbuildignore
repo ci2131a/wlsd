@@ -8,3 +8,5 @@
 ^notes$
 ^logo$
 ^cran-comments\.md$
+^data-raw$
+^README\.Rmd$
