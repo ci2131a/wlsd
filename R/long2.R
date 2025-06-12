@@ -23,7 +23,10 @@ long2cp <- function(data, id, time, drop = FALSE){
   # if we drop the groups with 1 row the above code will ignore those so we can re-index and return
   if(drop){
 
+    # change index
     row.names(newdata2) <- 1:dim(newdata2)[1]
+    # make sure names are unique
+    names(newdata2) <- make.names(names(newdata2), unique = TRUE)
 
     return(newdata2)
   }
@@ -42,6 +45,8 @@ long2cp <- function(data, id, time, drop = FALSE){
 
     # change the index
     row.names(full.data) <- 1:dim(full.data)[1]
+    # change the names
+    names(full.data) <- make.names(names(full.data), unique = TRUE)
 
     return(full.data)
   }
