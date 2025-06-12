@@ -42,6 +42,7 @@ basedate <- function(data, id){
   return(sorted[,names(data)]) # return preserving original order of columns
 }
 
+
 #' @export
 takefirst <- function(data, id, criteria.column, criteria, ...){
   sp <- split(data,data[id],...) # split data by group id
@@ -54,34 +55,3 @@ takefirst <- function(data, id, criteria.column, criteria, ...){
   return(full)
 }
 
-
-# internal function for long2count() - 3
-# internal function for cp2long() - 1
-track_var_change <- function(d, i, o){
-  # variables to omit
-  if(!is.null(o)){
-    ov <- as.vector(o)
-    one <- d[!names(d) %in% ov]
-  }
-  else{
-    one <- d
-  }
-  tryCatch({
-  # splitting by id
-  two <- split(one,one[i]) # a list where each element is a dataframe of rows for the id
-  # time varying columns check
-  tvars <- lapply(two, function(y) y[,vapply(y, function(x) any(diff(as.numeric(as.factor(x))) != 0, na.rm = TRUE),FUN.VALUE = logical(1)),drop = FALSE]) # checks if diff is nonzero
-  #tvars gives the list of time varying variables based on what changes row to row for each individual across all individuals
-
-  # now we take the names from tvars and subset one
-  tvars.names <- Reduce(union, lapply(tvars, names))
-  # tvars may have nulls for 1 row individuals so take union for all combinations of variable names that are different row to row
-
-  # after computing tvars, the constants will be the difference between the tvars and original names
-  consts.names <- setdiff(names(one), tvars.names)
-  return(list(consts.names,tvars.names))
-  },error = function(e){
-    warning(e,"\nError in splitting columns -- treating all columns as constant.")
-    return(list(names(one), NULL))
-  })
-}
