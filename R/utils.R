@@ -44,10 +44,10 @@ basedate <- function(data, id){
 
 
 #' @export
-takefirst <- function(data, id, criteria.column, criteria, ...){
+takefirst <- function(data, id, criteria.column, criteria){
   sp <- split(data,data[id],...) # split data by group id
   # take rows up until the first occurrence of the criteria in criteria.column
-  take <- lapply(sp, function(x) if(any(x[criteria.column]==criteria)) x[1L:which.max(x[criteria.column]==criteria),] else x, ...)
+  take <- lapply(sp, function(x) if(any(x[criteria.column]==criteria)) x[1L:which.max(x[criteria.column]==criteria),] else x)
   # combine it all
   full <- do.call(rbind,take)
   # change the new row numbers
