@@ -6,7 +6,7 @@
 events2state(data, events, number = TRUE, drop = TRUE, ...)
 }
 \description{
-Converts one or more event vectors in a data frame to a single state vector whose values represent combinations of events.
+Converts one or more event columns within a data frame to a single state vector whose values represent combinations of events.
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
@@ -16,14 +16,11 @@ Converts one or more event vectors in a data frame to a single state vector whos
   \item{...}{Further arguments to be passed to \code{interaction}.}
 }
 
-\value{A data frame with a single added vector whose values are the combination of events.}
+\value{A data frame with an added column called \code{state}.}
 \details{
-  Data sets may have one or more variables representing the occurrence of an event of interest. These may be depicted over several columns where each column       represents the binary effect of whether the event has occurred or not. Having this information in multiple columns may prove inconvenient for analysis. The \code{events2state()} function will convert the different event vectors from a data frame into a singlular vector whose values are the event combinations.
-
-
+For a data frame with the necessary inputs, the function will aggregate values across columns supplied to \code{events} through the \code{interaction} function. The key for the different combination levels is printed to the console.
 }
 
 \examples{
-# fill in with example from vignette
-
+events2state(data = long_data, events = c("event", "var2"))
 }

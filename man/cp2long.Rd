@@ -6,7 +6,7 @@
 cp2long(data, id, time1, time2, fill = FALSE)
 }
 \description{
-Transforms data from counting process format (time1, time2, status) to the longitudinal format (time, status).
+Transforms data from counting process format to the long format.
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
@@ -16,11 +16,10 @@ Transforms data from counting process format (time1, time2, status) to the longi
   \item{fill}{An optional argument that attempts to fill any NA values created for constant covariates by \code{id} during data set construction.}
 }
 \examples{
-
-
+cp2long(data = cp_data, id = "id", time1 = "time1", time2 = "time2")
 }
-\value{A data frame in longitudinal form.}
+\value{A data frame in long format.}
 \details{
-
+The data transition consolitdates information from the \code{time1} and \code{time2} argument into a single time column. All other columns are assumed to correspond to the \code{time2} point. Thus, the first row generally consists of \code{NA} values. The \code{fill} argument will attempt to discern any constant columns within \code{id} groups in order to populate that first row.
 }
 

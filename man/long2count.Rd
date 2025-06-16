@@ -6,7 +6,7 @@
 long2count(data, id, event = NULL, state = NULL, FUN, ...)
 }
 \description{
-Transforms longitudinal data to a format suitable for count regression by aggregating notable columns over time.
+Aggregates longitudinal data into a count format data set.
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
@@ -17,53 +17,16 @@ Transforms longitudinal data to a format suitable for count regression by aggreg
   \item{...}{Additional arguments supplied to \code{stats::aggregate}.}
 }
 \examples{
-
+# if the "event" column should be summed
+long2count(long_data, id = "id", event = "event")
+# if the "event" column contains levels that should be summed separately
+long2count(long_data, id = "id", state = "event")
 }
-\value{The returned value of the function is a data frame with new columns and fewer rows. The \code{event.counts} column represents the sum total of values in the \code{event} column for each level of \code{id}. The \code{count.weight} column sums the number of rows for each level of \code{id} which should represent visits.}
 \details{
-  For data of the form :
-  \tabular{lllll}{
-    \code{id} \tab \code{time} \tab \code{status}  \tab \code{var1} \tab \code{var2} \cr
-       1  \tab  0 \tab  0  \tab  24 \tab 2.1 \cr
-       1  \tab  31 \tab  1  \tab  24 \tab 2.4 \cr
-       1  \tab  64 \tab  1  \tab  24 \tab 3.9 \cr
-       2  \tab  0 \tab  0  \tab  18 \tab 4.2 \cr
-       2  \tab  33 \tab  0  \tab  18 \tab 1.6\cr
-       3  \tab  0 \tab  1  \tab  39 \tab 5.5\cr
-       }
-      will yield a data frame of the form :
-      \tabular{llllll}{
-    \code{id} \tab \code{status.counts} \tab \code{time}  \tab \code{var1} \tab \code{count.weight} \tab \code{var2} \cr
-       1  \tab  2 \tab  0  \tab  24 \tab 3 \tab 2.8 \cr
-       2  \tab  0 \tab  0  \tab  18 \tab 2 \tab 2.9 \cr
-       3  \tab  1 \tab  0  \tab  39 \tab 1 \tab 5.5 \cr
-       }
-      through the code provided in example using the \code{event} argument.
-
-  Similarly using the \code{state} argument, data of the form :
-  \tabular{lllll}{
-    \code{id} \tab \code{time} \tab \code{status}  \tab \code{var1} \tab \code{var2} \cr
-       1  \tab  0 \tab  0  \tab  24 \tab 2.1 \cr
-       1  \tab  31 \tab  1  \tab  24 \tab 2.4 \cr
-       1  \tab  64 \tab  1  \tab  24 \tab 3.9 \cr
-       2  \tab  0 \tab  0  \tab  18 \tab 4.2 \cr
-       2  \tab  33 \tab  0  \tab  18 \tab 1.6\cr
-       3  \tab  0 \tab  1  \tab  39 \tab 5.5\cr
-       }
-      will yield a data frame of the form :
-      \tabular{lllllll}{
-    \code{id} \tab \code{status} \tab \code{status.counts} \tab \code{time}  \tab \code{var1} \tab \code{count.weight} \tab \code{var2} \cr
-       1  \tab  0 \tab 1 \tab  0  \tab  24 \tab 3 \tab 2.8 \cr
-       1  \tab  1 \tab 2 \tab  0  \tab  24 \tab 3 \tab 2.8 \cr
-       2  \tab  0 \tab 2 \tab  0  \tab  18 \tab 2 \tab 5.5 \cr
-       2  \tab  1 \tab 0 \tab  0  \tab  18 \tab 2 \tab 2.8 \cr
-       3  \tab  0 \tab 0 \tab  0  \tab  39 \tab 1 \tab 2.9 \cr
-       3  \tab  1 \tab 1 \tab  0  \tab  39 \tab 1 \tab 5.5 \cr
-       }
-      through the code provided in example.
-
-Note that the variable \code{time} is technically a time-dependent variable since its values change by rows. Since it was not supplied to the \code{tvars} argument, the first value for each individual was carried over.
-
+The returned data frame aggregates any time-depended values based on row-wise changes within \code{id} groups. New columns include \code{event.counts} which represents the sum total of values in the \code{event} column for each level of \code{id} or the sum total of levels of the \code{state} column if supplied as well as the \code{count.weight} column which sums the number of rows for each level of \code{id}.
+}
+\value{
+A data frame aggregated into count format.
 }
 
 

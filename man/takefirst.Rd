@@ -1,9 +1,9 @@
 
 \name{takefirst}
 \alias{takefirst}
-\title{Subset observations for grouped data up to a single criteria value}
+\title{Subset observations for grouped data based on first occurrence of a criteria value}
 \usage{
-takefirst(data, id, criteria.column, criteria, ...)
+takefirst(data, id, criteria.column, criteria)
 }
 \description{
 Takes all rows of a data frame up to and including the first occurrence of a supplied criteria for grouped data.
@@ -13,19 +13,15 @@ Takes all rows of a data frame up to and including the first occurrence of a sup
   \item{id}{A character string of the identification vector name defining groups in \code{data}.}
   \item{criteria.column}{The name as a character string of the column in \code{data} where the criteria is located.}
   \item{criteria}{The value of the cutoff for subsetting.}
-  \item{...}{Further arguments to be supplied to internal functions and or methods.}
 }
 \examples{
-# example
+takefirst(long_data, "id", criteria.column = "var1", criteria = 10.4)
 }
-\value{A subsetted data frame.
-
-
-Returns the data supplied subset such that all rows up to and including the first occurrence of the value supplied are retained. All rows after the first occurrence are discarded for each group.
+\value{A data frame.
 }
 
 \details{
-  details
+  Returns a data frame that takes all rows within the groups supplied by \code{id} up to and including the first occurrence of the value of \code{criteria} in \code{criteria.column}.
 }
 
 

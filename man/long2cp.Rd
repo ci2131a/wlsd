@@ -6,7 +6,7 @@
 long2cp(data, id, time, drop = FALSE)
 }
 \description{
-Transforms data from the longitudinal format (time, status) used in the msm package to the counting process format (time1, time2, status) used in the survival package.
+Transforms data from long format to counting process format.
 }
 \arguments{
   \item{data}{A data frame with relevant columns.}
