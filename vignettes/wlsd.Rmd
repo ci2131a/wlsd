@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
   comment = "#>" # I think this determines the text at the start of a line
 )
 #load("../data/LBP.rda")
-devtools::load_all()
-#library(wlsd)
+#devtools::load_all()
+library(wlsd)
 ```
 
 <!--
