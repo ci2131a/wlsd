@@ -9,10 +9,10 @@ events2state <- function(data, events, number = TRUE, drop = TRUE, ...){
   old.levels <- levels(state)
   if(number){ # if want numbered states, compute and print
     state <- as.numeric(state)
-    cat("Combination Levels:", old.levels,"\n")
-    cat("Numbered Levels:", sort(as.numeric(as.factor(old.levels))),"\n")
+    message("Combination Levels: ", paste(old.levels, collapse = " "))
+    message("Numbered Levels: ", paste(sort(as.numeric(as.factor(old.levels))), collapse = " "))
   }else{ # otherwise keep the default from interaction
-    cat("Combination Levels:", old.levels, "\n")
+    message("Combination Levels: ", paste(old.levels, collapse = " "))
   }
   output <- cbind(data,state)
   names(output) <- make.names(names(output), unique = TRUE)
