@@ -4,6 +4,8 @@
 # wlsd <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The `wlsd` package (wrangling longitudinal survival data) provides a set
