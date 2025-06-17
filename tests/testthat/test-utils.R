@@ -1,24 +1,111 @@
 # utils tests
 
 test_that("2 events to state", {
-  expect_equal(events2state(long_events,c("event1","event2")), long_e2s)
+
+  df <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1)
+  )
+
+  result <- events2state(df, c("e1","e2"))
+  output <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1),
+    state = c(1,2,3,1,3)
+  )
+
+  expect_equal(result, output)
+
 })
 
-test_that("2 events to state added arguments - number false but drop true", {
-  expect_equal(events2state(long_events,c("event1","event2"), number = FALSE, drop = TRUE, sep = ""), long_e2s_fct)
+test_that("2 events to state added arguments - number true but drop false", {
+
+  df <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1)
+  )
+
+  result <- suppressMessages(events2state(df, c("e1","e2"), drop = FALSE))
+
+  output <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1),
+    state = c(1,3,4,1,4)
+  )
+
+  expect_equal(result, output)
+
 })
 
+test_that("2 events to state - number false", {
 
-test_that("2 events to state added arguments - false drop", {
-  expect_equal(events2state(long_events,c("event1","event2"), number = TRUE, drop = FALSE), long_e2s_nd)
+  df <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1)
+  )
+
+  result <- suppressMessages(events2state(df, c("e1","e2"), number = FALSE))
+
+  output <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(0,2,6,0,3),
+    e1 = c(0,0,1,0,1),
+    e2 = c(0,1,1,0,1),
+    state = factor(c("0.0","0.1","1.1","0.0","1.1"))
+  )
+
+  expect_equal(result, output)
+
 })
+
 
 
 test_that("take first tv == 1", {
-  expect_equal(takefirst(long_data,"id","tv",1), first_covar)
+
+  df <- data.frame(
+    id = c(1,1,1,1,2,2,2,2),
+    t = c(1,2,3,4,1,2,3,4),
+    e = c(0,0,1,1,0,1,0,1)
+  )
+
+  result <- takefirst(df, "id", "e", 1)
+  output <- data.frame(
+    id = c(1,1,1,2,2),
+    t = c(1,2,3,1,2),
+    e = c(0,0,1,0,1)
+  )
+
+  expect_equal(result, output)
+
 })
 
 
 test_that("add a baseline observation", {
-  expect_equal(basedate(missing_baseline, "id"), baseline_result)
+
+  df <- data.frame(
+    id = c(1,1,2,2),
+    t = c(1,3,2,4),
+    c = c(2,2,1,1),
+    tv = c(0,1,0,1)
+  )
+
+  result <- basedate(df, "id")
+  output <- data.frame(
+    id = c(1,1,1,2,2,2),
+    t = c(NA,1,3,NA,2,4),
+    c = c(2,2,2,1,1,1),
+    tv = c(NA,0,1,NA,0,1)
+  )
+
+  expect_equal(result, output)
 })
