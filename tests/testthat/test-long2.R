@@ -3,6 +3,30 @@
 
 # long2cp() tests
 
+test_that("long2cp with NO drops", {
+
+  df <- data.frame(
+    id = c(1,1,1,2,2,3),
+    time = c(0,1,2,0,1,0),
+    e = c(0,0,1,0,1,0),
+    c = c(1,1,1,1,1,1),
+    t = c(1,2,3,1,2,1)
+  )
+
+  result <- long2cp(data = df, id = "id", time = "time", drop = FALSE)
+  output <- data.frame(
+    id = c(1,1,2,3),
+    time1 = c(0,1,0,0),
+    time2 = c(1,2,1,0),
+    e = c(0,1,1,0),
+    c = c(1,1,1,1),
+    t = c(2,3,2,1)
+  )
+
+  expect_equal(result, output)
+})
+
+
 test_that("dropped id where they do not have enough rows", {
 
   df <- data.frame(
