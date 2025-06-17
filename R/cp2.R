@@ -12,10 +12,9 @@ cp2long <- function(data, id, time1, time2, fill = FALSE){
 
       # select first with time to add on top
       first.row <- data[!duplicated(data[id]),]
-      first.row[,t_var]
       names(first.row)[names(first.row) == time1] <- "time"
       first.row <- first.row[,!names(first.row) %in% time2]
-      first.row[,!t_var %in% union(time1,time2)] <- NA
+      first.row[,setdiff(t_var,c(time1, time2))] <- NA
 
       # select the data except time1 to be used as the bottom portion of long form
       last <- data[,!names(data) %in% time1]
@@ -43,8 +42,8 @@ cp2long <- function(data, id, time1, time2, fill = FALSE){
     names(last)[names(last) == time2] <- "time"
     newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
   }
+  # make the names unique if time exists
   names(newdata) <- make.names(names(newdata), unique = TRUE)
-  # returns output similar to the timeline data described in survival vignette
-  # all timevarying covariates are required to be specified to avoid duplicated rows in merge
+
   return(newdata)
 }
