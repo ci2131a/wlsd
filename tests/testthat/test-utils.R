@@ -9,7 +9,7 @@ test_that("2 events to state", {
     e2 = c(0,1,1,0,1)
   )
 
-  result <- events2state(df, c("e1","e2"))
+  result <- suppressMessages(events2state(df, c("e1","e2")))
   output <- data.frame(
     id = c(1,1,1,2,2),
     t = c(0,2,6,0,3),
