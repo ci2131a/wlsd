@@ -2,54 +2,50 @@
 
 # function to setup longitudinal data for counting process
 #' @export
-long2cp <- function(data, id, time, drop = FALSE){
+long2cp <- function(data, id, time, status = NULL, drop = FALSE){
 
-  # pull all rows except the last as the starts (per group)
-  starts <- data[duplicated(data[id],fromLast = T),c(id,time)]
-  # all rows except the first are the stops (per group)
-  stops <- data[duplicated(data[id]),]
-  # this data frame will have all other columns for everything except first row (added later)
-  elses <- data[duplicated(data[id]),!names(data) %in% c(id,time),drop = FALSE]
-
-  # rename the times for start and stop
-  names(starts)[names(starts) == time] <- "time1"
-  names(stops)[names(stops) == time] <- "time2"
-
-  # combine everything
-  newdata1 <- starts
-  newdata1$time2 <- stops$time2
-  newdata2 <- cbind(newdata1,elses)
-
-  # if we drop the groups with 1 row the above code will ignore those so we can re-index and return
   if(drop){
+    # if dropping then let the subsetting get rid of ids with only one row
 
-    # change index
-    row.names(newdata2) <- 1:dim(newdata2)[1]
-    # make sure names are unique
-    names(newdata2) <- make.names(names(newdata2), unique = TRUE)
-
-    return(newdata2)
+    # pull all rows except the last as the starts (per group) for all columns
+    starts <- data[duplicated(data[id],fromLast = TRUE),, drop = FALSE]
+    # all rows except the first are the stops (per group) for id and time columns
+    stops <- data[duplicated(data[id]),c(id,time,status), drop = FALSE]
   }
-  else{ # otherwise...
+  # if not dropping then dont drop
+  else{
+    # get first row for everyone in case there are any 1 row ID
+    firsts <- data[!duplicated(data[id]),, drop = FALSE]
+    # get the rest of the start times for those with more than 1 row
+    starts <- data[duplicated(data[id],fromLast = TRUE),, drop = FALSE]
+    # merge the 1 row together with the more than 1 row ids
+    starts <- merge(firsts,starts, all = TRUE)
 
-    # pull out groups which have 1 row
-    one.rowers <- data[which(data[[id]] %in% newdata2[[id]] == FALSE),]
-    # make new column for stop time which is the same as time1
-    one.rowers["time2"] <- one.rowers[time]
-    # rename the original time to be the time1
-    names(one.rowers)[names(one.rowers) == time] <- "time1"
-    # match order of one rows with the newdata2
-    one.rowers <- one.rowers[names(newdata2)]
-    # column bind the 2 data sets since columns should match
-    full.data <- rbind(newdata2, one.rowers)
 
-    # change the index
-    row.names(full.data) <- 1:dim(full.data)[1]
-    # change the names
-    names(full.data) <- make.names(names(full.data), unique = TRUE)
-
-    return(full.data)
+    # get the last row for 1 row ids
+    lasts <- data[!duplicated(data[id], fromLast = TRUE), c(id,time,status), drop = FALSE]
+    # grab the stop times for individuals
+    stops <- data[duplicated(data[id]), c(id,time,status), drop = FALSE]
+    # merge the lasts with the stops
+    stops <- merge(stops,lasts, all = TRUE)
   }
+
+  # add in the time2
+  starts[["time2"]] <- stops[[time]]
+  # add in the adjusted event column
+  for(item in status){
+    starts[[item]] <- stops[[item]]
+  }
+  # reorder columns to put time2 next to the starts time and preserve the rest of the order
+  starts <- starts[,c(1:which(colnames(starts) == time), which(colnames(starts) == "time2"),which(colnames(starts) %in% setdiff(colnames(starts),colnames(starts[c(1:which(colnames(starts) == time), which(colnames(starts) == "time2"))]))))]
+  # rename the times for start
+  names(starts)[names(starts) == time] <- "time1"
+  # make sure names are unique
+  names(starts) <- make.names(names(starts), unique = TRUE)
+  # ensure rownumbers are ordered
+  rownames(starts) <- 1L:nrow(starts)
+
+  return(starts)
 
 }
 
