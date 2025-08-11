@@ -1,49 +1,46 @@
 
 #' @export
-cp2long <- function(data, id, time1, time2, fill = FALSE){
+cp2long <- function(data, id, time1, time2, status = NULL, fill = FALSE){
 
+  # take everything except the stop and status -- base data frame
+  starts <- data[, ! names(data) %in% c(time2, status), drop = FALSE]
+  # preserve the location of the first time column (used for order preservation later)
+  col_order <- data[0L, setdiff(names(data), time2)]
+  names(col_order)[names(col_order) == time1] <- "time"
+  # rename time1 for preparation for merge
+  names(starts)[names(starts) == time1] <- "time"
 
+  # to try to keep constants everywhere
   if(fill){
     tryCatch({
-      # split constant and time varying variables
+      # determine what is constant
       var_list <- track_var_change(d = data, i = id, o = NULL)
       const_var <- var_list[[1]] # pull out constants
-      t_var <- var_list[[2]] # pull out time
 
-      # select first with time to add on top
-      first.row <- data[!duplicated(data[id]),]
-      names(first.row)[names(first.row) == time1] <- "time"
-      first.row <- first.row[,!names(first.row) %in% time2]
-      first.row[,setdiff(t_var,c(time1, time2))] <- NA
-
-      # select the data except time1 to be used as the bottom portion of long form
-      last <- data[,!names(data) %in% time1]
-      # rename time to match with other
-      names(last)[names(last) == time2] <- "time"
-
-      # merge together
-      newdata <- merge(first.row,last, all = TRUE)
-
-
-    }, error = function(e){
+      # include the constant column names in the lasts so everything is filled in merge
+      lasts <- data[, c(const_var, time2, status), drop = FALSE]
+      names(lasts)[names(lasts) == time2] <- "time"
+      newdata <- merge(starts, lasts, by = c(id,"time", const_var), all = TRUE)
+    },error = function(e){
+      # if we error just skip
       warning(e,"\nError in filling columns -- leaving values as is.")
-      first <- data[,names(data) %in% c(id,time1)]
-      names(first)[names(first) == time1] <- "time"
-      last <- data[,!names(data) %in% c(time1)]
-      names(last)[names(last) == time2] <- "time"
-      newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
+      lasts <- data[, c(id, time2, status), drop = FALSE]
+      names(lasts)[names(lasts) == time2] <- "time"
+      newdata <- merge(starts, lasts, by = c(id,"time"), all = TRUE)
     })
+  }
+  else{
+    # if not filling then leave without columns
+    lasts <- data[, c(id, time2, status), drop = FALSE]
+    names(lasts)[names(lasts) == time2] <- "time"
+    newdata <- merge(starts, lasts, by = c(id,"time"), all = TRUE)
+  }
 
-  }
-  else {
-    first <- data[,names(data) %in% c(id,time1)]
-    names(first)[names(first) == time1] <- "time"
-    last <- data[,!names(data) %in% c(time1)]
-    names(last)[names(last) == time2] <- "time"
-    newdata <- merge(first,last,by = c(id,"time"), all = TRUE)
-  }
-  # make the names unique if time exists
+  # return preserving original order of columns + new cols
+  newdata <- newdata[,names(col_order)]
+  # make columns unique
   names(newdata) <- make.names(names(newdata), unique = TRUE)
-
+  # change rownames
+  rownames(newdata) <- 1L:nrow(newdata)
   return(newdata)
 }
