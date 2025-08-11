@@ -1,3 +1,3 @@
-# wlsd 0.1.0
+# wlsd 1.0.0
 
 * Initial CRAN submission.
