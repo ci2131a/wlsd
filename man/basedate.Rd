@@ -15,8 +15,8 @@ Creates a new row of values for subjects representing baseline observations in a
 \examples{
 basedate(long_data, "id")
 }
-\value{A data frame similar to the input.}
+\value{A data frame with added row for each level of \code{id}.}
 \details{
-  Adds a new row for each level of the `id` column. Internal functions will try to determine any constant columns by checking for consistency within `id` groups in order to fill in some of the blanks.
+  Adds a new row for each level of the \code{id} column. Internal functions will try to determine any constant columns by checking for consistency within \code{id} groups in order to fill in some of the blanks.
 }
 

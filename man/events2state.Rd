@@ -16,7 +16,7 @@ Converts one or more event columns within a data frame to a single state vector 
   \item{...}{Further arguments to be passed to \code{interaction}.}
 }
 
-\value{A data frame with an added column called \code{state}.}
+\value{Returns the input data frame with an added column called \code{state}.}
 \details{
 For a data frame with the necessary inputs, the function will aggregate values across columns supplied to \code{events} through the \code{interaction} function. The key for the different combination levels is printed to the console.
 }

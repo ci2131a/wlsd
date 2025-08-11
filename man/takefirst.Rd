@@ -17,7 +17,7 @@ Takes all rows of a data frame up to and including the first occurrence of a sup
 \examples{
 takefirst(long_data, "id", criteria.column = "var1", criteria = 10.4)
 }
-\value{A data frame.
+\value{A data frame subset up to and including the first row matching \code{criteria} in \code{cirteria.column} for each level of \code{id}.
 }
 
 \details{
