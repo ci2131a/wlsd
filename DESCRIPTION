@@ -1,11 +1,11 @@
-Package: wlsd
 Type: Package
-Date: 2021
+Package: wlsd
+Date: 2025
 Title: Wrangling Longitudinal Survival Data
 Version: 0.1.0
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: Transitions between longitudinal survival data formats.
+Description: Preparation of data sets for model building through transitions between formats.
 URL: https://github.com/ci2131a/wlsd
 BugReports: https://github.com/ci2131a/wlsd/issues
 License: GPL-3
@@ -20,5 +20,5 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
