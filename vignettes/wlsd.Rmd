@@ -1,7 +1,7 @@
 ---
 title: "wlsd: Wrangling Longitudinal Survival Data"
 author: "Charles Ingulli"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+#date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   rmarkdown::html_vignette
   #pdf_document
@@ -24,52 +24,29 @@ knitr::opts_chunk$set(
 library(wlsd)
 ```
 
-<!--
-# Introduction 3
-
-In analytics, the typical work flow starts with taking a data set and preparing it for further analysis. The objectives of analysis will typically determine the type of models that are to be fitted or the visualizations that will be created which all set forth the requirements for formatting the data. Given similar data sets and formatting requirements, the task of preparation may see an opportunity for automation. 
-
-
-The wlsd (wrangling longitudinal survival data) package in R was designed with the intention to ease the process of formatting longitudinal data sets for models in the realm of survival analysis. Preparation may require intimate knowledge of the models and requirements of the data in order to fit so the functions in this package seek to ease with some of the work while also shedding more light onto some of these details.
-
-
-This vignette will introduce some models used in survival analysis and the formats they require for fitting and then showcase some of the available features with this package through some examples.
-
-
-
-
-# Introduction 2
-
-Survival analysis is a branch of statistics that analyzes the time to occurrence of some measurable outcome (citation needed). It sees most applications in biological settings where death is an easily measurable outcome. Other biological outcomes may be one or more diseases with varying severity. This treats being disease free as survival and disease contraction as non-survival. However, survival analysis can also apply to machine failure applications where the survival of a part is the area of focus instead of a biological organism. In a more general context, it can be argued that any area of risk analysis in which a 
-
--->
-
 
 # Introduction
 
-Survival analysis is a branch of statistical modeling concerned with the study of time-to-event data (citation needed). However, there are very many techniques and methods for analyzing data in the context of survival whether it be with time or without time. (Author of multivariate survival analysis) uses a continuous time markov model in order to analyze time-to-event data where there exist more than 2 events. Removing time from analysis can lead to many traditional regression models being viewed as survival analysis tools. The odds or relative risk from logistic regression and Poisson regression respectively can be used for predicting survival and therefore could be categorized under this framework. This umbrella discipline of models became the bulk of discussion within my Master's thesis analyzing survival data from the perspective of different survival analysis models. 
+The `wlsd` (wrangling longitudinal survival data) package supports processing of repeated observation data for model building in survival analysis. Survival analysis is a branch of statistics for the study of time-to-event data. Within this discipline, there exist several models that are applicable in cases of one event, multiple events, or repeated events. Not all models use the same data format as input therefore, depending on the available data and desired model, it might be necessary to transition a data set from one format to another. In longitudinal or repeated observation data, there are several available formats that capture the time-to-event nature of survival analysis. Each of these formats has their own set of specifications that make it necessary to have detailed knowledge of the format in order to meet its criteria. This package simplifies the transition process through functions that will transform data from one format to another. The goal is to make it easier for analysts to build different models within survival analysis by providing ways to reorganize a data set to the appropriate format.
 
 
-As an ancillary project, the `wlsd` package was developed to support the processing of necessary data. The transformation and preparation tasks were performed many times on many data sets that it seemed right to introduce functional programming to improve on the repetition. After that thought it seemed right to just turn it into a package. 
-
-Transitioning between different data formats requires detailed knowledge on how information is parsed and how variables are treated. The `wlsd` package in R provides methods for transforming data between different usable formats in an effort to ease this process. `wlsd` can transition between the counting process format and longitudinal or panel format. 
+The remainder of this vignette will discuss several notable data formats for longitudinal data, the transitions available in this package, and an application example with discussions on the models that can be fit. 
 
 
 
 ## Data Formats
 
 
-A longitudinal study or panel study is a repeated observation method by which to investigate some phenomenon [@grillpanellong]. In other words, it analyzes subjects over time. These studies are often carried out over large periods of time with variables of interest being measured at snapshots of the process for each subject [@msmvignette]. In economics, panel data is used widely to analyze things such as labor markets [@frees2004]. Panel data also sees application to disease progression such as heart deterioration after transplant [@msmvignette]. For our purposes, the terms, longitudinal and panel, are interchangeable as they are effectively the same. A more technical definition is given by @frees2004 who defines both terms differently but also uses them interchangeably. We refer to the data generated by a longitudinal study or panel study as longitudinal data or panel data.
-
+A longitudinal study or panel study is a repeated observation method by which subjects are monitored over time [@panelbook]. These types of studies are often carried out over large periods of time with variables of interest being measured at snapshots of the process for each subject [@msmvignette]. In economics, panel data is used widely to analyze things such as labor markets which historically came from a survey of individuals [@frees2004]. Panel data also sees application in analyzing disease progression such as heart deterioration after transplant [@msmvignette]. For our purposes, the terms longitudinal and panel are interchangeable as they are effectively the same. A more technical definition is given by @frees2004 who defines both terms independently based on their origins but similarly uses the terms interchangeably.
 
 The three main requirements for longitudinal data are:
 
-1. a subject identifier - this is some distinct index by which each entity under observation may be distinguished
-2. time - the passage of events must be recorded in some manner
-3. subject related variables - any other information pertaining to the subject and or time of observation
+1. a subject identifier - this is some distinct index by which each entity under observation may be distinguished.
+2. time - the passage of events must be recorded in some manner.
+3. subject related variables - any other information pertaining to the subject and or time of observation.
 
 
-As most longitudinal studies involve many subjects, such as multiple patients in a medical study, longitudinal data will have a subject identifier. This may be a name or a number depending on the setup of the study but the manner in which subjects are identified is not usually relevant so long as different subjects can be differentiated from one another. Time is another requirement that may be recorded differently based on the data collection methods. It may be recorded using dates with or without cloak adjustments or as a duration.  All other variables should be tied to the subject but they may or may not be dependent on time. In the one case, there may be some variables that are constant throughout the study and do not change with time such as the type of medication taken during a drug trial. These are sometimes referred to as time independent variables or constant variables ??? I do not really have a citation???. The other case sees variables that do change with the subject over time. This may include something such as age. These are sometimes referred to time dependent variables or non-constant variables ???. While not all variables are required to fall in one case or another and most studies will have a mix of types, they will all usually have at least one variable that is time dependent as this motivates the need for repeated observations over time.
+As most longitudinal studies involve many subjects, such as multiple patients in a medical study, longitudinal data will have a subject identifier. This may be a name or a number depending on the setup of the study but the manner in which subjects are identified is not usually relevant so long as different subjects can be differentiated from one another. Time is another requirement that may be recorded differently based on the data collection methods. It may be recorded using dates with or without clock adjustments or as a duration.  All other variables should be tied to the subject but they may or may not be dependent on time. In the one case, there may be some variables that are constant throughout the study and do not change with time such as the type of medication taken during a drug trial. These might be referred to as time independent variables or constant variables. The other case sees variables that do change with the subject over time. This may include something such as age. These are sometimes referred to time dependent variables. While not all variables are required to exclusively fall in one case or another and most studies will have a mix of types, they will all usually have at least one variable that is time dependent as this motivates the need for repeated observations over time. This one time dependent variable might be referred to as a status indicator when looking at occurrences of events over time or a state when categorizing values of a process. Either case is acceptable for the longitudinal study should be a preference to record keeping. Having one or more status indicator for different events is possible and can be translated to states if needed which is discussed later.
 
 
 There exist at least several different data formats for organizing longitudinal data. Those used by `wlsd` will be covered in the remainder of this section. This list is not exhaustive and represents a subset of applicable formats as survival analysis is a large discipline and may contain many more data formats. Previous work for @mythesis motivated the current list and future work may seek to expand it but suggestions for additions are appreciated.
@@ -104,7 +81,7 @@ knitr::kable(wide_data, caption = "Wide Format Data")
 ```
 
 
-The relevant observational information is now shown across multiple columns for the multiple time points. Initially, there were 3 time dependent variables. The long format table showed each variable had their own column in the long format. Now, in the wide format, the time dependent variables have multiple columns for each observation. There are 3 time dependent variables that now contribute 4 columns each for a total of 12 time dependent columns in the wide format table. This is because individual 1 had 4 time observations that are now translated from rows to columns. A number was appended to the original column name in order to indicate to which observation the column values correspond. Since the number of columns is determined by the maximum observations for a subject, some columns might have missing information as the subject did not have an observation. Subjects that did not have observations at these times have the values as missing denoted by `NA` in order to maintain consistency across the shape of the table. 
+The relevant observational information is now shown across multiple columns for the multiple time points. Initially, there were 3 time dependent variables. The long format table showed each variable had their own column in the long format. In the wide format, the time dependent variables have multiple columns for each observation. There are 3 time dependent variables that now contribute 4 columns each for a total of 12 time dependent columns in the wide format table. This is because individual 1 had 4 time observations that are now translated from rows to columns. A number was appended to the original column name in order to indicate to which observation the column values correspond. Since the number of columns is determined by the maximum observations for a subject, some columns might have missing information as the subject did not have an observation. Subjects that did not have observations at these times have the values as missing denoted by `NA` in order to maintain consistency across the shape of the table. 
 
 
 Interpretation for observations becomes a bit more cumbersome as you have to look at the correct column to discern time dependent values. All of the relevant information for a subject is located within that subject row. For the first observation of subject 1, you have to look at the relevant row for the first column of each variable. This would be `time1`, `event1` and `var11`. The constant variable `var2` has the same value for each time point so only has 1 column.
@@ -118,7 +95,7 @@ This format is not currently supported by the `wlsd` package but may see inclusi
 
 ### Counting Process Format
 
-The most frequently used data format for survival analysis is the counting process format. This is a longitudinal data format characterized by a series of time intervals. Each row corresponds to a different time interval where the start and stop points are defined by columns. All other columns represent different variable values associated with the interval and or subject. Observations typically occur at the end of the interval therefore, any time dependent variables are taken to be the value recorded at the stop point of the time interval. Constant variables are time invariant and remain the same for the subject over all time intervals ergo all subject rows. The table below shows an example of counting process format using the data from our previous examples.
+The most frequently used data format for survival analysis is the counting process format. This is a longitudinal data format characterized by a series of time intervals. Each row corresponds to a different time interval where the start and stop points are defined by columns. All other columns represent different variable values associated with the interval and or subject. The table below shows an example of counting process format using the data from our previous examples.
 
 
 
@@ -127,10 +104,15 @@ knitr::kable(cp_data, caption = "Counting Process Format")
 ```
 
 
-Here, the time information has been split into two columns, namely `time1` and `time2`, defining our interval. Mathematically, the interval is right-open. That is, $(time1, time2] = \{x|time1 < x \leq time2\}$. So, multiple time intervals for a particular subject will not overlap. As noted previously, other variables for a subject are taken to be observed at the end of the interval. An example interpretation for the first row is subject 1 started their first interval after time 0 and ended it at time 31 at which point their `event` is 0 and `var1` is 11.3. The constant, `var2`, is 10 regardless of time. Note that this data format has 1 less observation for each subject than previous formats. Since observed values are taken at the end of the interval, the format does not contain information about observed values of the starting time point of the first interval. This consideration becomes important when performing data transitions. 
+Here, the time information has been split into two columns, named `time1` and `time2`, defining our interval. Mathematically, the interval is considered open left and closed right. That is, $(time1, time2] = \{x|time1 < x \leq time2\}$. Therefore, multiple time intervals for a particular subject will not overlap.
+Any time related covariates are interpreted over the interval while any status indicator variables are interpreted at the end of the interval.
+Looking at the first row in the above table, `event` and `var1` are the two columns for the time dependent variables. The first value of `var1` is 10.4 so subject 1 has this value over the interval from time 0 to time 31. Since the value of `event` is 0, this subject does not have an event at the end of this interval. Looking at the second interval for subject 1, the value of `var1` is 11.3 over the interval from time 31 to time 64 and the subject does not have an event at the end of the interval. Subject 1 has an event at time 96 which is the end of the third interval. 
+Constant variables are time invariant and remain the same for the subject over all time intervals which would be all subject rows. 
 
 
-A detailed description of the counting process format is given by @collett in its use for survival analysis. @survival-vignette also gives a description of the counting process format with use case examples on how it is leveraged in survival analysis.
+
+
+A detailed description of the counting process format is given by @collett in its use for survival analysis. @time-vignette also gives a description of the counting process format with use case examples on how it is leveraged in survival analysis.
 
 
 
@@ -153,7 +135,7 @@ Each subject has their own row where the `event` column now counts each subjects
 
 ## Data Transitions
 
-The discussion of data formats gives motivation for the data transitions that are available in the package. Figure ??? shows the available transitions within the package for the data formats discussed thus far.
+The discussion of data formats gives motivation for the data transitions that are available in the package. The figure below shows the available transitions within the package for the data formats discussed thus far.
 
 
 ```{r transition_graphic, echo=FALSE, out.width="50%", fig.cap="Format transitions for wlsd."}
@@ -162,57 +144,62 @@ knitr::include_graphics("../man/figures/wlsd-format-drawing.png")
 
 
 
-In the figure above, transitions possible through `wlsd` are denoted by an arrow. The wide format does not currently have functions for transition so it remains isolated from the rest of the formats. The solid arrows represent explicitly defined transitions while the single dashed arrow represents a transition that is possible but does not have its own function for use. This is transition is discussed a bit more in the "long2count()" section below.
+In the figure above, transitions possible through `wlsd` are denoted by an arrow. The solid arrows represent explicitly defined transitions while the single dashed arrow represents a transition that is possible but does not have its own function for use. This transition is discussed a bit more in the "Long Format to Count Format" section below. The wide format does not currently have functions for transition so it remains isolated from the rest of the formats. However, the `reshape()` function from the `stats` package offers transitions between long and wide format [@statspackage].
 
 ### Long Format to Counting Process Format
 
 
-The first transition to be discussed is the long format to counting process format transition. The `long2cp()` function is used for this operation and works through the code below.
+The first transition to be discussed is the long format to counting process format transition. The `long2cp()` function is used for this operation. It requires arguments for `data`, `id`, `time` and `status`. The `data` argument is used for the `data.frame` object for transition while `id` is the column name for the subject identifier. The `time` argument is for the column name of the single time column that is to be transitioned to an interval across columns while the `status` argument is used for any status indicator variables that need to be transitioned accordingly. Recall from the format section that the value of any status indicator is assumed to be associated with the end point of the interval. So, any column names supplied to the `status` argument are transitioned under this assumption. The result is the first value is dropped for each subject. All other columns are processed such that the value is associated with the first time point of the interval. This results in the last value for each subject being dropped. For constant columns, this is irrelevant but for any other time dependent covariates that are not named in the `status` argument, this is important to note.
+
+
+The code below shows an example using the long format data from earlier.
 
 ```{r long2cp}
-long2cp(data = long_data, id = "id", time = "time")
+long2cp(data = long_data, id = "id", time = "time", status = "event")
 ```
-It requires `data`, `id`, and `time` arguments by default. Using the data from the long format example earlier, the function will transition data to the counting process format.
+
+
+Looking at the output above for the subject with `id` of 1, since the `event` column was supplied to the `status` argument then the values associated with the end points of that column are kept. All other time dependent covariates keep values associated with the starting points. In this case, that is the `var1` column. Using row 3 as an example, individual 1 experienced the event at time 96 which is kept as the value for `event`. However, their last recorded value for `var1` was 12.7 at time 64. This is then used for the 3rd row as 12.7 is used over the interval from time 64 to time 96.
 
 
 By default, the function will keep all subjects through the `drop = FALSE` argument. However, it may be desirable to drop individuals that only have 1 row of data in long format as they do not have enough information for time intervals. Consider the `dropped_long` data set below which is missing the 2nd observation for `id` 3. This subject has only one time point so a start and stop time interval is not really feasible. However, to maintain the data set that is input to `long2cp()`, the subject is kept in the output data set with a time interval that starts and stops at the one time point given. All covariates are then associated with that one point.
 
 ```{r long2cp no drop}
 dropped_long <- long_data[1:8,]
-long2cp(dropped_long, id = "id", time = "time", drop = "FALSE")
+long2cp(dropped_long, id = "id", time = "time", status = "event", drop = "FALSE")
 ```
 
 If the subject is intended to be dropped for analysis purposes, then the `drop = TRUE` argument can be used to exclude these rows from the output data set.
 
 ```{r long2cp drop}
-long2cp(dropped_long, id = "id", time = "time", drop = "TRUE")
+long2cp(dropped_long, id = "id", time = "time", status = "event", drop = "TRUE")
 ```
 
-The single row for `id` 3 is missing in the output above. 
+The single row for `id` value 3 is missing in the output above. 
 
 ### Counting Process Format to Long Format
 
 The transition from counting process format to long format is done through the `cp2long()` function. Arguments are similar to the previous function but take two time points as input instead of one. This is to consolidate the two end points of the interval into a single column.
 
 ```{r cp2long}
-cp2long(data = cp_data, id = "id", time1 = "time1", time2 = "time2")
+cp2long(data = cp_data, id = "id", time1 = "time1", time2 = "time2", status = "event")
 ```
 
-Note that in this example there are a few `NA` values which differ from the example counting process table. This is due to the missing information about the first time covariates mentioned earlier. By default, the function will not make any assumptions about this data and will simply leave `NA` values. If desired, the `fill = TRUE` option may be used in order to insert values for any constant columns.
+Note that in this example there are a few `NA` values which differ from the example counting process table. This is due to the missing information about the first time covariates mentioned earlier. By default, the function will not make any assumptions about this data and will simply leave `NA` values for any unknown values. Therefore, any column names supplied to the `status` will be missing the first value for each `id` as these are assumed to be associated with the endpoint of the interval so there is no value for the starting point of the first interval. Similarly, any other time dependent columns will be missing the last value of each `id` as they are associated with the start time point over the whole interval so the last value of the last interval will be missing. If desired, the `fill = TRUE` option may be used in order to insert values for any constant columns that might result in an `NA` due to this reasoning.
 
 
 ```{r cp2long fill}
-cp2long(cp_data, id = "id", time1 = "time1", time2 = "time2", fill = TRUE)
+cp2long(cp_data, id = "id", time1 = "time1", time2 = "time2", status = "event", fill = TRUE)
 ```
 
-Here, the `var2` column was constant and `NA` values were populated.
+Here, the `var2` column was constant and `NA` values were populated with more relevant values.
 
 ### Long Format to Count Format
 
-The transitions to count format are done through the `long2count()` function. While originally conceived to perform the transition from long format to count format, the logic here is the same as that in the counting process format to count format so this function can be used for both transitions. The major difference between the long format and counting process format is how time is organized so the logic of aggregating any covariates row-wise should be the same.
+Transitions to the count format are done through the `long2count()` function. While originally conceived to perform the transition from long format to count format, the logic here is the same as that in the counting process format to count format so this function can be used for both transitions. The major difference between the long format and counting process format is how time is organized so the logic of aggregating any covariates row-wise should be the same but the aggregated values will be different across formats.
 
 
-The `long2count()` function requires a data set and identifier to perform aggregation operations. It also requires an argument to either the `event` or `state` argument. This will determine how to treat events of interest under the observation scheme of the data set. The `event` argument will treat the given column or columns as numeric counts of observations while the `state` argument will treat the column largely as a factor with different levels. 
+The `long2count()` function requires a data set and identifier column to perform aggregation operations. It also requires an argument to either the `event` or `state` argument. This will determine how to treat events of interest under the observation scheme of the data set. The `event` argument will treat the given column or columns as numeric counts of observations while the `state` argument will treat the column largely as a factor with different levels. 
 
 
 Consider the first example below with the long format data and the single event column called "event".
@@ -259,7 +246,7 @@ There exist a few other functions within the `wlsd` package to help with small n
 
 
 # Applications
-## Example: Low-Back Pain Analysis
+## Example: Low-Back Pain Data Transitions
 
 
 In order to demonstrate the use cases of this package, consider this example using a low-back pain (LBP) data set to be prepared for several models in a larger survival analysis effort. The data set originally comes from @garg which was used in @mythesis for a comprehensive survival analysis where some of this example originates. See the appendix section for more discussion on data preparation using some early versions of this package.
@@ -325,7 +312,7 @@ LBP_msm <- events2state(LBPwBaseline, events = c("case.lbp",
                                                  "case.lt"))
 ```
 
-In the code above, the 4 given input columns have values which when combined give 9 total combinations. The combination levels are output to the console when the function runs. By default, these combinations are changed to numbers through the `number = TRUE` argument. The `interaction()` function handles the combinations of columns which by default drops unused combinations. That can be toggled in the `drop` argument.
+In the code above, the 4 given input columns have values which when combined give 9 total combinations. The combination levels are output to the console when the function runs. By default, these combinations are changed to numbers through the `number = TRUE` argument. The `interaction()` function handles the combinations of columns which by default drops unused combinations. This can be toggled in the `drop` argument by `drop = FALSE`.
 
 
 The `LBP_msm` data set is suitable input for the `msm` package. This is largely the form used for the analysis in @mythesis which has a section on using the `msm` package for multi-state model analysis of this data set.
@@ -335,13 +322,13 @@ The `LBP_msm` data set is suitable input for the `msm` package. This is largely 
 In order to transition the data set to counting process format, the `long2cp()` function is used below.
 
 ```{r LBP cp}
-LBP_cp <- long2cp(LBPwBaseline, id = "sid", time = "time_to_row")
+LBP_cp <- long2cp(LBPwBaseline, id = "sid", time = "time_to_row", status = c("case.lbp", "case.med", "case.sc", "case.lt"))
 LBP_cp[1:5,1:10]
 ```
 
 Any subjects with 1 row are dropped since they do not have enough time information for the desired analysis. The `survival` package contains analysis models that take data in counting process format as input. The `LBP_cp` data set has multiple occurrences of LBP so a repeated event or recurrent model might be more suitable.
 
-If a simple Cox proportional-hazards model is desired, all observations after the first occurrence of LBP can be truncated using the `takefirst()` function. 
+If a simple Cox proportional-hazards model for the time to first instance of LBP is desired, all observations after the first occurrence of LBP can be truncated using the `takefirst()` function. 
 
 
 ```{r takefirst}
