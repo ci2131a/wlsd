@@ -20,16 +20,26 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-The `wlsd` package (wrangling longitudinal survival data) provides a set of functions to transition between different data formats that are commonly used in survival analysis. Moving between different formats often requires more detailed knowledge on how the information is parsed as well as the specific model for which that format is used. For example, easily take your study's longitudinal or panel data and convert it to counting process format for use in a Cox Proportional-Hazards model. 
+The `wlsd` package (wrangling longitudinal survival data) supports the transition of data sets between different formats used in survival analysis. There exist several different models with different data formats that might all be applicable to the same data set. Therefore, it might be necessary to transition a data set into a different format. However, transformations require detailed knowledge of the data format. In order to simplify data processing, this package provides functions that transition between formats such that getting to model building can be faster. 
+
 
 For more details, see the `wlsd` vignette.
 
 ## Installation
 
-The development version of this package is maintained on GitHub.
+### Stable Version
+
+To install the latest stable version from CRAN, run the following in the R console:
+
+```{r}
+install.packages("wlsd")
+```
 
 
-In the R console, run the following code to install the development version of the package:
+
+### Development Version
+
+The development version of this package is maintained on GitHub. In the R console, run the following code to install the development version of the package:
 
 ```{r, eval = FALSE}
 devtools::install_github("ci2131a/wlsd")
@@ -40,11 +50,19 @@ devtools::install_github("ci2131a/wlsd")
 
 ## Example
 
-A small example for transitioning from a long format data set to a counting process data set is shown below:
+A small example for transitioning from a long format data set to a counting process data set is shown below.
 
 ```{r example}
 library(wlsd)
-long2cp(data = long_data, id = "id", time = "time")
+head(long_data, n = 5)
 ```
+
+The following code transitions the above data set into counting process format:
+
+```{r}
+long2cp(data = long_data, id = "id", time = "time", status = "event")
+```
+
+
 
 See the `wlsd` vignette for more details.

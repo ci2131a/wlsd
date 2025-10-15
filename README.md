@@ -8,14 +8,15 @@
 [![R-CMD-check](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The `wlsd` package (wrangling longitudinal survival data) provides a set
-of functions to transition between different data formats that are
-commonly used in survival analysis. Moving between different formats
-often requires more detailed knowledge on how the information is parsed
-as well as the specific model for which that format is used. For
-example, easily take your study’s longitudinal or panel data and convert
-it to counting process format for use in a Cox Proportional-Hazards
-model.
+The `wlsd` package (wrangling longitudinal survival data) supports the
+transition of data sets between different formats used in survival
+analysis. There exist several different models with different data
+formats that might all be applicable to the same data set. Therefore, it
+might be necessary to transition a data set into a different format.
+However, transformations require detailed knowledge of the data format.
+In order to simplify data processing, this package provides functions
+that transition between formats such that getting to model building can
+be faster.
 
 For more details, see the `wlsd` vignette.
 
