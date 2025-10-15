@@ -22,10 +22,20 @@ For more details, see the `wlsd` vignette.
 
 ## Installation
 
-The development version of this package is maintained on GitHub.
+### Stable Version
 
-In the R console, run the following code to install the development
-version of the package:
+To install the latest stable version from CRAN, run the following in the
+R console:
+
+``` r
+install.packages("wlsd")
+```
+
+### Development Version
+
+The development version of this package is maintained on GitHub. In the
+R console, run the following code to install the development version of
+the package:
 
 ``` r
 devtools::install_github("ci2131a/wlsd")
@@ -38,18 +48,31 @@ package from CRAN through `install.packages("devtools")`.
 ## Example
 
 A small example for transitioning from a long format data set to a
-counting process data set is shown below:
+counting process data set is shown below.
 
 ``` r
 library(wlsd)
-long2cp(data = long_data, id = "id", time = "time")
+head(long_data, n = 5)
+#>   id time event var1 var2
+#> 1  1    0     0 10.4   10
+#> 2  1   31     0 11.3   10
+#> 3  1   64     0 12.7   10
+#> 4  1   96     1 17.5   10
+#> 5  2    0     0  1.2   25
+```
+
+The following code transitions the above data set into counting process
+format:
+
+``` r
+long2cp(data = long_data, id = "id", time = "time", status = "event")
 #>   id time1 time2 event var1 var2
-#> 1  1     0    31     0 11.3   10
-#> 2  1    31    64     0 12.7   10
-#> 3  1    64    96     1 17.5   10
-#> 4  2     0    33     0  5.9   25
-#> 5  2    33    59     1  4.4   25
-#> 6  3     0    28     1  8.0   16
+#> 1  1     0    31     0 10.4   10
+#> 2  1    31    64     0 11.3   10
+#> 3  1    64    96     1 12.7   10
+#> 4  2     0    33     0  1.2   25
+#> 5  2    33    59     1  5.9   25
+#> 6  3     0    28     1 10.6   16
 ```
 
 See the `wlsd` vignette for more details.
