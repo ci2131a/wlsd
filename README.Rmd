@@ -31,7 +31,7 @@ For more details, see the `wlsd` vignette.
 
 To install the latest stable version from CRAN, run the following in the R console:
 
-```{r}
+```{r, eval = FALSE}
 install.packages("wlsd")
 ```
 
