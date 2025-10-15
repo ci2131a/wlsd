@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Preparation of data sets for model building through transitions between formats.
+Supports the conversion of data between formats commonly used in longitudinal survival analysis.
 }
 \seealso{
 Useful links:
