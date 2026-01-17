@@ -46,9 +46,18 @@ A data frame on the following variables:
 Data set construction was done through the consolidation of various source files pulled from the original database. The final data frame contains follow-up information for selected individuals. The case definitions assessed over time were \code{case.lbp}, \code{case.med}, \code{case.sc}, and \code{case.lt}. Column \code{time_to_row} is constructed using the \code{Baseline.date} and \code{Date} columns to calculate the number of days between observations (denoted by rows). All other columns are constant with respect to time. Categorical variables were recorded through self-assessment on the part of the subject. The \code{age} and \code{weight} variables were able to be physically measured to then be used in calculation of \code{bmi}.
 }
 \source{
-  Author (Year),
-  Title.
-  \emph{Journal} \bold{volume}, issue?.
+LBP Research Consortium, University of Wisconsin-Milwaukee
+}
+\references{
+  Garg, Arun, Kurt Hegmann, J. Moore, Jay Kapellusch, Matthew Thiese, Sruthi Boda,
+  Parag Bhoyar, Donald Bloswick, Andrew Merryweather, Richard Sesek, Gwen
+  Deckow-Schaefer, James Foster, Eric Wood, Xiaoming Sheng, and Richard Holubkov
+  (2013). Study protocol title: A prospective cohort study of low back pain. BMC
+  Musculoskeletal Disorders 14(84), 84.
+
+
+  Ingulli, Charles. (2020). A Survey of Statistical Methods for Investigating Risk of Low Back Pain in a Cohort of Manufacturing Workers. (85696). [Master's Thesis, American University]
+
 }
 \examples{
 LBP
