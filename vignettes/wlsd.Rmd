@@ -1,10 +1,8 @@
 ---
 title: "wlsd: Wrangling Longitudinal Survival Data"
 author: "Charles Ingulli"
-#date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   rmarkdown::html_vignette
-  #pdf_document
 bibliography: wlsd.bib
 nocite: '@*'
 vignette: >
