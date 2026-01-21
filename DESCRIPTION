@@ -1,11 +1,10 @@
 Type: Package
 Package: wlsd
-Date: 2025
 Title: Wrangling Longitudinal Survival Data
 Version: 1.0.0
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
-Description: Supports the conversion of data between formats commonly used in longitudinal survival analysis.
+Description: Converts observation data between formats for event analysis.
 URL: https://github.com/ci2131a/wlsd
 BugReports: https://github.com/ci2131a/wlsd/issues
 License: GPL-3

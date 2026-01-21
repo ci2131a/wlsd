@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Supports the conversion of data between formats commonly used in longitudinal survival analysis.
+Converts observation data between formats for event analysis.
 }
 \seealso{
 Useful links:
