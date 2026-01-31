@@ -11,3 +11,4 @@
 ^data-raw$
 ^README\.Rmd$
 ^revdep$
+^CRAN-SUBMISSION$
