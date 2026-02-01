@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Converts observation data between formats for event analysis.
+Streamlines the process of transitioning between data formats commonly used in survival analysis. Functions convert longitudinal data between formats used as input for survival models as well as support overall preparation. Users are able to focus on model building rather than data wrangling.
 }
 \seealso{
 Useful links:
