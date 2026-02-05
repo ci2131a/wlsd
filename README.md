@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ci2131a/wlsd/actions/workflows/R-CMD-check.yaml)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/wlsd)](https://cran.r-project.org/package=wlsd)
 <!-- badges: end -->
 
 The `wlsd` package (wrangling longitudinal survival data) supports the
