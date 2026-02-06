@@ -1,7 +1,7 @@
 Type: Package
 Package: wlsd
 Title: Wrangling Longitudinal Survival Data
-Version: 1.0.1
+Version: 1.0.1.9000
 Authors@R: person("Charles", "Ingulli", email = "charlesfi@outlook.com",
                   role = c("aut", "cre"))
 Description: Streamlines the process of transitioning between data formats commonly used in survival analysis. Functions convert longitudinal data between formats used as input for survival models as well as support overall preparation. Users are able to focus on model building rather than data wrangling.
